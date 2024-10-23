@@ -32,6 +32,7 @@ export const NavBar = () => {
           >
             <FaUser className="" />
             <span className="">تسجيل الدخول</span>
+            
           </Link>
         </div>
       </nav>
