@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Author {
+  author_id    Int            @id @default(autoincrement())
+  author_name  String         @db.VarChar(60)
+  nationality  String?        @db.VarChar(30)
+  book_authors book_authors[]
+}
+
+model Branch {
+  branch_id           String      @id @db.VarChar(15)
+  training_start_date DateTime    @db.Date
+  training_end_date   DateTime    @db.Date
+  speciality_id       String?     @db.VarChar(15)
+  Speciality          Speciality? @relation(fields: [speciality_id], references: [speciality_id], onDelete: NoAction, onUpdate: NoAction, map: "branch_ibfk_1")
+  Student             Student[]
+
+  @@index([speciality_id], map: "speciality_id")
+}
+
+model Categories {
+  categorie_id   Int     @id @default(autoincrement())
+  categorie_name String  @db.VarChar(50)
+  books          books[]
+}
+
+model Speciality {
+  speciality_id     String   @id @db.VarChar(15)
+  speciality        String   @db.VarChar(50)
+  training_duration Int
+  training_type     String?  @db.VarChar(25)
+  Branch            Branch[]
+}
+
+model Student {
+  student_id   Int       @id
+  first_name   String    @db.VarChar(25)
+  last_name    String    @db.VarChar(25)
+  birth_date   DateTime  @db.Date
+  phone_number String?   @db.VarChar(15)
+  sex          String    @db.VarChar(10)
+  branch_id    String?   @db.VarChar(15)
+  Branch       Branch?   @relation(fields: [branch_id], references: [branch_id], onDelete: NoAction, onUpdate: NoAction, map: "student_ibfk_1")
+  loans        loans[]
+  readers      readers[]
+
+  @@index([branch_id], map: "branch_id")
+}
+
+model book_authors {
+  author_id Int
+  book_id   String @db.VarChar(25)
+  Author    Author @relation(fields: [author_id], references: [author_id], onDelete: NoAction, onUpdate: NoAction, map: "book_authors_ibfk_1")
+  books     books  @relation(fields: [book_id], references: [book_id], onDelete: NoAction, onUpdate: NoAction, map: "book_authors_ibfk_2")
+
+  @@id([author_id, book_id])
+  @@index([book_id], map: "book_id")
+}
+
+model book_copys {
+  copy_id          String    @id @db.VarChar(25)
+  inventory_number Int
+  location         String?   @db.VarChar(5)
+  book_id          String    @db.VarChar(25)
+  loans            loans[]
+  readers          readers[]
+
+  @@index([book_id], map: "book_id")
+}
+
+model books {
+  book_id             String           @id @db.VarChar(25)
+  book_title          String           @db.VarChar(200)
+  summary             String?          @db.VarChar(255)
+  total_pages         Int?
+  publishing_year     Int?
+  stored_date         DateTime?        @default(now()) @db.Timestamp(0)
+  cover               String?          @db.VarChar(250)
+  categorie_id        Int
+  publishing_house_id Int
+  book_authors        book_authors[]
+  Categories          Categories       @relation(fields: [categorie_id], references: [categorie_id], onDelete: NoAction, onUpdate: NoAction, map: "books_ibfk_1")
+  publishing_house    publishing_house @relation(fields: [publishing_house_id], references: [publishing_house_id], onDelete: NoAction, onUpdate: NoAction, map: "books_ibfk_2")
+
+  @@index([categorie_id], map: "categorie_id")
+  @@index([publishing_house_id], map: "publishing_house_id")
+}
+
+model indexs {
+  index_id      String  @id @db.VarChar(20)
+  index_picture String? @db.VarChar(250)
+  book_id       String  @db.VarChar(25)
+
+  @@index([book_id], map: "book_id")
+}
+
+model loans {
+  loan_id         Int              @id @default(autoincrement())
+  loan_start_date DateTime         @default(now()) @db.Timestamp(0)
+  loan_end_date   DateTime?        @db.Date
+  note            String?          @db.VarChar(50)
+  student_id      Int
+  manager_id      Int
+  copy_id         String           @db.VarChar(25)
+  Student         Student          @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "loans_ibfk_1")
+  managers        managers         @relation(fields: [manager_id], references: [manager_id], onDelete: NoAction, onUpdate: NoAction, map: "loans_ibfk_2")
+  book_copys      book_copys       @relation(fields: [copy_id], references: [copy_id], onDelete: NoAction, onUpdate: NoAction, map: "loans_ibfk_3")
+  penalty_record  penalty_record[]
+
+  @@index([copy_id], map: "copy_id")
+  @@index([manager_id], map: "manager_id")
+  @@index([student_id], map: "student_id")
+}
+
+model managers {
+  manager_id Int       @id @default(autoincrement())
+  username   String    @db.VarChar(25)
+  passkey    String    @db.VarChar(50)
+  first_name String    @db.VarChar(25)
+  last_name  String    @db.VarChar(25)
+  sex        String    @db.VarChar(10)
+  email      String?   @db.VarChar(50)
+  loans      loans[]
+  readers    readers[]
+}
+
+model penalty_record {
+  penalty_id         Int        @id @default(autoincrement())
+  penalty_start_date DateTime   @default(now()) @db.Timestamp(0)
+  loan_id            Int
+  punishment_id      Int
+  loans              loans      @relation(fields: [loan_id], references: [loan_id], onDelete: NoAction, onUpdate: NoAction, map: "penalty_record_ibfk_1")
+  punishment         punishment @relation(fields: [punishment_id], references: [punishment_id], onDelete: NoAction, onUpdate: NoAction, map: "penalty_record_ibfk_2")
+
+  @@index([loan_id], map: "loan_id")
+  @@index([punishment_id], map: "punishment_id")
+}
+
+model publishing_house {
+  publishing_house_id   Int     @id @default(autoincrement())
+  publishing_house_name String  @db.VarChar(100)
+  books                 books[]
+}
+
+model punishment {
+  punishment_id  Int              @id @default(autoincrement())
+  cause          String           @db.VarChar(100)
+  duration       Int
+  penalty_record penalty_record[]
+}
+
+model readers {
+  read_session Int        @id @default(autoincrement())
+  entry_time   DateTime   @default(now()) @db.Timestamp(0)
+  exit_time    DateTime?  @db.Timestamp(0)
+  student_id   Int
+  manager_id   Int
+  copy_id      String     @db.VarChar(25)
+  Student      Student    @relation(fields: [student_id], references: [student_id], onDelete: NoAction, onUpdate: NoAction, map: "readers_ibfk_1")
+  managers     managers   @relation(fields: [manager_id], references: [manager_id], onDelete: NoAction, onUpdate: NoAction, map: "readers_ibfk_2")
+  book_copys   book_copys @relation(fields: [copy_id], references: [copy_id], onDelete: NoAction, onUpdate: NoAction, map: "readers_ibfk_3")
+
+  @@index([copy_id], map: "copy_id")
+  @@index([manager_id], map: "manager_id")
+  @@index([student_id], map: "student_id")
+}
