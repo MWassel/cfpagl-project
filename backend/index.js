@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import specialityRoutes from "./src/speciality/speciality.route.js";
+import branchRoutes from "./src/branch/branch.route.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -16,6 +17,7 @@ app.use(
 
 // Routes
 app.use("/api/speciality", specialityRoutes);
+app.use("/api/branch", branchRoutes);
 
 app.get("/", (req, res) => {
   res.send("CFPAGL SERVER RUNNING!");

@@ -10,6 +10,7 @@ training_type varchar(25)
 );
 
 create table Branch (
+    -- routes and controllers done
 branch_id varchar(15) primary key not null,
 training_start_date date not null,
 training_end_date date not null,

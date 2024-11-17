@@ -1,19 +1,14 @@
-const express = require("express");
+import express from "express";
+import { getBranch, patchBranch, postBranch } from "./branch.controller.js";
 const router = express.Router();
 
-// post a branch
-router.post("/create-branch", async (req, res) => {
-   // branch id input --varchar
-   // training start date --date
-   // training end date --date
-   // speciality id --varchar --fk ref speciality
-});
-// patch a branch
-router.patch("/patch-branch", async (req, res) => {
-   // branch id input --varchar
-   // training start date --date
-   // training end date --date
-   // speciality id --varchar --fk ref speciality
-});
+// Get a branch
+router.get("/get-branch", getBranch);
 
-module.exports = router;
+// Post a branch
+router.post("/create-branch", postBranch);
+
+// Patch a branch
+router.patch("/patch-branch", patchBranch);
+
+export default router;
