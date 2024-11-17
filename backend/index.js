@@ -1,5 +1,6 @@
-const express = require("express");
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import specialityRoutes from "./src/speciality/speciality.route.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -13,9 +14,8 @@ app.use(
   })
 );
 
-// routes
-const bookRoutes = require("./src/books/book.route");
-app.use("/api/books", bookRoutes);
+// Routes
+app.use("/api/speciality", specialityRoutes);
 
 app.get("/", (req, res) => {
   res.send("CFPAGL SERVER RUNNING!");

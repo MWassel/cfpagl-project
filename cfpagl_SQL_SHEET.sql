@@ -2,6 +2,7 @@ create database CFPAGL;
 use CFPAGL;
 
 create table Speciality (
+    -- routes and controllers done
 speciality_id varchar(15) primary key not null,
 speciality varchar(50) not null,
 training_duration int not null,
@@ -84,7 +85,8 @@ CREATE TABLE book_authors (
     PRIMARY KEY (author_id, book_id)
 );
 
-create table indexs (
+create table indexs ( 
+    -- book_id been made a primary key too in a later edit
 index_id varchar(20) primary key not null,
 index_picture varchar(250),
 book_id varchar(25) not null,

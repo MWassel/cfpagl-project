@@ -1,19 +1,19 @@
-const express = require("express");
+import express from "express";
+import {
+  getSpeciality,
+  patchSpeciality,
+  postSpeciality,
+} from "./speciality.controller.js";
+
 const router = express.Router();
 
-// post a speciality
-router.post("/create-speciality", async (req, res) => {
-    // speciality_id input (varchar)
-    // speciality name input (varchar)
-    // training_duration input (monthes int)
-    // training_type (varchar)
-});
-// patch a speciality
-router.patch("/patch-speciality", async (req, res) => {
-    // speciality_id input (varchar)
-    // speciality name input (varchar)
-    // training_duration input (monthes int)
-    // training_type (varchar)
-});
+// Post a speciality
+router.post("/create-speciality", postSpeciality);
 
-module.exports = router;
+// Get a speciality
+router.get("/get-speciality", getSpeciality);
+
+// Patch a speciality
+router.patch("/patch-speciality", patchSpeciality);
+
+export default router;
