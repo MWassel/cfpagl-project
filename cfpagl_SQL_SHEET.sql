@@ -20,6 +20,7 @@ foreign key (speciality_id) references Speciality
 );
 
 create table Student (
+    -- routes and controllers done
 student_id int(10) primary key,
 first_name varchar(25) not null,
 last_name varchar(25) not null,
@@ -32,6 +33,7 @@ foreign key (branch_id) references Branch
 );
 
 create table Author (
+    -- routes and controllers done
 author_id int primary key auto_increment,
 author_name varchar(60) not null, 
 nationality varchar(30)

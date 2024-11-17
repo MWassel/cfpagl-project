@@ -1,23 +1,13 @@
-const express = require("express");
+import express from "express";
+import { getAuthor, patchAuthor, postAuthor } from "./author.controller.js";
+
 const router = express.Router();
 
 // post a author
-router.post("/create-author", async (req, res) => {
-    // author_id int primary key auto_increment,
-    // author_name varchar(60) not null, 
-    // nationality varchar(30)
-});
+router.post("/create-author", postAuthor);
 // patch a author
-router.patch("/patch-author", async (req, res) => {
-    // author_id int primary key auto_increment,
-    // author_name varchar(60) not null, 
-    // nationality varchar(30)
-});
+router.patch("/patch-author", patchAuthor);
 // get authors
-router.get("/get-author", async (req, res) => {
-    // author_id int primary key auto_increment,
-    // author_name varchar(60) not null, 
-    // nationality varchar(30)
-});
+router.get("/get-author", getAuthor);
 
-module.exports = router;
+export default router;
