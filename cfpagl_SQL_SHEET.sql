@@ -40,22 +40,26 @@ nationality varchar(30)
 );
 
 create table Categories (
+    -- routes and controllers done
 categorie_id int primary key auto_increment not null,
 categorie_name varchar(50) not null 
 );
 
 create table publishing_house (
+    -- routes and controllers done
 publishing_house_id int primary key auto_increment not null,
 publishing_house_name varchar(100) not null 
 );
 
 create table punishment (
+    -- routes and controllers done
 punishment_id int primary key auto_increment not null,
 cause varchar(100) not null,
 duration int not null
 );
 
 create table books (
+    -- routes and controllers done
 book_id varchar(25) primary key not null,
 book_title varchar(200) not null,
 summary varchar(255),

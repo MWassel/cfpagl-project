@@ -1,25 +1,20 @@
-const express = require("express");
+import express from "express";
+import {
+  getCategories,
+  postCategory,
+  patchCategory,
+  deleteCategory,
+} from "./categories.controller.js";
+
 const router = express.Router();
 
 // post a categorie
-router.post("/create-categorie", async (req, res) => {
-    // categorie_id int primary key auto_increment not null,
-    // categorie_name varchar(50) not null 
-});
+router.post("/create-categorie", postCategory);
 // patch a categorie
-router.patch("/patch-categorie", async (req, res) => {
-    // categorie_id int primary key auto_increment not null,
-    // categorie_name varchar(50) not null 
-});
+router.patch("/patch-categorie", patchCategory);
 // deleted a categorie
-router.delete("/delete-categorie", async (req, res) => {
-    // categorie_id int primary key auto_increment not null,
-    // categorie_name varchar(50) not null 
-});
+router.delete("/delete-categorie", deleteCategory);
 // get categories
-router.get("/get-categorie", async (req, res) => {
-    // categorie_id int primary key auto_increment not null,
-    // categorie_name varchar(50) not null 
-});
+router.get("/get-categorie", getCategories);
 
-module.exports = router;
+export default router;

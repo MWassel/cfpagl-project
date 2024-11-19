@@ -1,63 +1,43 @@
-const express = require("express");
+import express from "express";
+import multer from "multer";
+import path from "path";
+
+import {
+  postBook,
+  patchBook,
+  deleteBook,
+  getBook,
+  getBookByID,
+} from "./book.controller.js";
+
 const router = express.Router();
 
-// post a book
-router.post("/create-book", async (req, res) => {
-// book_id varchar(25) primary key not null,
-// book_title varchar(200) not null,
-// summary varchar(255),
-// total_pages int,
-// publishing_year int,
-// stored_date timestamp default current_timestamp,
-// cover varchar(250),
-// categorie_id int not null,foreign key (categorie_id) references Categories 
-// (categorie_id)
-// publishing_house_id int not null,foreign key (publishing_house_id) references publishing_house 
-// (publishing_house_id)
+// Multer configuration (for handling book cover uploads)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(process.cwd(), "/assets/book-covers"));
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  },
 });
 
+const upload = multer({ storage });
+
+// post a book
+router.post("/create-book", upload.single("cover"), postBook);
+
 // patch a book
-router.patch("/patch-book", async (req, res) => {
-    // book_id varchar(25) primary key not null,
-    // book_title varchar(200) not null,
-    // summary varchar(255),
-    // total_pages int,
-    // publishing_year int,
-    // stored_date timestamp default current_timestamp,
-    // cover varchar(250),
-    // categorie_id int not null,foreign key (categorie_id) references Categories 
-    // (categorie_id)
-    // publishing_house_id int not null,foreign key (publishing_house_id) references publishing_house 
-    // (publishing_house_id)
-    });
+router.patch("/patch-book/", upload.single("cover"), patchBook);
 
-    // delete a book
-router.delete("/delete-book", async (req, res) => {
-    // book_id varchar(25) primary key not null,
-    // book_title varchar(200) not null,
-    // summary varchar(255),
-    // total_pages int,
-    // publishing_year int,
-    // stored_date timestamp default current_timestamp,
-    // cover varchar(250),
-    // categorie_id int not null,foreign key (categorie_id) references Categories 
-    // (categorie_id)
-    // publishing_house_id int not null,foreign key (publishing_house_id) references publishing_house 
-    // (publishing_house_id)
-    });
+// delete a book
+router.delete("/delete-book/:book_id", deleteBook);
 
-        // delete a book
-router.get("/get-book", async (req, res) => {
-    // book_id varchar(25) primary key not null,
-    // book_title varchar(200) not null,
-    // summary varchar(255),
-    // total_pages int,
-    // publishing_year int,
-    // stored_date timestamp default current_timestamp,
-    // cover varchar(250),
-    // categorie_id int not null,foreign key (categorie_id) references Categories 
-    // (categorie_id)
-    // publishing_house_id int not null,foreign key (publishing_house_id) references publishing_house 
-    // (publishing_house_id)
-    });
-module.exports = router;
+// get books
+router.get("/get-book", getBook);
+
+// get single book
+router.get("/get-book/:book_id", getBookByID);
+
+export default router;
