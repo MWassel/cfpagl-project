@@ -1,6 +1,7 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
+import { requireAuth } from "../middleware/authMiddleware.js";
 
 import {
   postBook,
@@ -26,13 +27,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // post a book
-router.post("/create-book", upload.single("cover"), postBook);
+router.post("/create-book", requireAuth, upload.single("cover"), postBook);
 
 // patch a book
-router.patch("/patch-book/", upload.single("cover"), patchBook);
+router.patch("/patch-book/", requireAuth, upload.single("cover"), patchBook);
 
 // delete a book
-router.delete("/delete-book/:book_id", deleteBook);
+router.delete("/delete-book/:book_id", requireAuth, deleteBook);
 
 // get books
 router.get("/get-book", getBook);

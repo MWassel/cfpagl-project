@@ -1,41 +1,20 @@
-const express = require("express");
+import express from "express";
+import {
+  postBookCopy,
+  patchBookCopy,
+  deleteBookCopy,
+  getBookCopys,
+} from "./book_copys.controller.js";
+
 const router = express.Router();
 
 // post a book_copy
-router.post("/create-book_copy", async (req, res) => {
-    // copy_id varchar(25) primary key not null,
-    // inventory_number int not null,
-    // location varchar(5),
-    // book_id varchar(25) not null,
-    // foreign key (book_id) references Books
-    // (book_id)
-});
+router.post("/create-book_copy", postBookCopy);
 // patch a book_copy
-router.patch("/patch-book_copy", async (req, res) => {
-    // copy_id varchar(25) primary key not null,
-    // inventory_number int not null,
-    // location varchar(5),
-    // book_id varchar(25) not null,
-    // foreign key (book_id) references Books
-    // (book_id)
-});
+router.patch("/patch-book_copy", patchBookCopy);
 // deleted a book_copy
-router.delete("/delete-book_copy", async (req, res) => {
-    // copy_id varchar(25) primary key not null,
-    // inventory_number int not null,
-    // location varchar(5),
-    // book_id varchar(25) not null,
-    // foreign key (book_id) references Books
-    // (book_id)
-});
+router.delete("/delete-book_copy/:copy_id", deleteBookCopy);
 // get book_copys
-router.get("/get-book_copy", async (req, res) => {
-    // copy_id varchar(25) primary key not null,
-    // inventory_number int not null,
-    // location varchar(5),
-    // book_id varchar(25) not null,
-    // foreign key (book_id) references Books
-    // (book_id)
-});
+router.get("/get-book_copy", getBookCopys);
 
-module.exports = router;
+export default router;

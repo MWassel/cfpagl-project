@@ -1,41 +1,29 @@
-const express = require("express");
+import express from "express";
+import {
+  postManager,
+  patchManager,
+  deleteManager,
+  getManagers,
+  getManagerById,
+  loginManager,
+  logoutManager,
+} from "./managers.controller.js";
+
 const router = express.Router();
 
 // post a manager
-router.post("/create-manager", async (req, res) => {
-    // username varchar (25) not null,
-    // passkey varchar (50) not null,
-    // first_name varchar (25) not null,
-    // last_name varchar (25) not null,
-    // sex varchar(10) not null,
-    // email varchar(50)
-});
+router.post("/create-manager", postManager);
+// login a manager
+router.post("/login-manager", loginManager);
+// logout a manager
+router.get("/logout-manager", logoutManager);
 // patch a manager
-router.patch("/patch-manager", async (req, res) => {
-    // username varchar (25) not null,
-    // passkey varchar (50) not null,
-    // first_name varchar (25) not null,
-    // last_name varchar (25) not null,
-    // sex varchar(10) not null,
-    // email varchar(50)
-});
+router.patch("/patch-manager/:manager_id", patchManager);
 // deleted a manager
-router.delete("/delete-manager", async (req, res) => {
-    // username varchar (25) not null,
-    // passkey varchar (50) not null,
-    // first_name varchar (25) not null,
-    // last_name varchar (25) not null,
-    // sex varchar(10) not null,
-    // email varchar(50)
-});
+router.delete("/delete-manager/:manager_id", deleteManager);
 // get managers
-router.get("/get-manager", async (req, res) => {
-    // username varchar (25) not null,
-    // passkey varchar (50) not null,
-    // first_name varchar (25) not null,
-    // last_name varchar (25) not null,
-    // sex varchar(10) not null,
-    // email varchar(50)
-});
+router.get("/get-manager", getManagers);
+// get single manager
+router.get("/get-manager/:manager_id", getManagerById);
 
-module.exports = router;
+export default router;

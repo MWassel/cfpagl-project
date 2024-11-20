@@ -38,7 +38,6 @@ const postBook = async (req, res) => {
       publishing_house_id,
     } = req.body;
 
-    // Check if a file was uploaded
     if (!req.file) {
       return res.status(400).json({ error: "Book cover is required." });
     }

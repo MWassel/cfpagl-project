@@ -76,6 +76,7 @@ foreign key (publishing_house_id) references publishing_house
 );
 
 create table book_copys (
+    -- routes and controllers done
 copy_id varchar(25) primary key not null,
 inventory_number int not null,
 location varchar(5),
@@ -85,6 +86,7 @@ foreign key (book_id) references Books
 );
 
 CREATE TABLE book_authors (
+    -- routes and controllers done
     author_id INT NOT NULL,
     book_id VARCHAR(25) NOT NULL,
     FOREIGN KEY (author_id) REFERENCES Author (author_id),
@@ -93,18 +95,20 @@ CREATE TABLE book_authors (
 );
 
 create table indexs ( 
+    -- routes and controllers done
     -- book_id been made a primary key too in a later edit
 index_id varchar(20) primary key not null,
 index_picture varchar(250),
-book_id varchar(25) not null,
+book_id varchar(25) not null --primary key,
 foreign key (book_id) references Books
 (book_id)
 );
 
 create table managers (
+    -- routes and controllers done
 manager_id int primary key auto_increment not null,
 username varchar (25) not null,
-passkey varchar (50) not null,
+passkey varchar (512) not null,
 first_name varchar (25) not null,
 last_name varchar (25) not null,
 sex varchar(10) not null,

@@ -28,7 +28,7 @@ model Branch {
 model Categories {
   categorie_id   Int     @id @default(autoincrement())
   categorie_name String  @db.VarChar(50)
-  books          books[]
+  Books          Books[]
 }
 
 model Speciality {
@@ -58,7 +58,6 @@ model book_authors {
   author_id Int
   book_id   String @db.VarChar(25)
   Author    Author @relation(fields: [author_id], references: [author_id], onDelete: NoAction, onUpdate: NoAction, map: "book_authors_ibfk_1")
-  books     books  @relation(fields: [book_id], references: [book_id], onDelete: NoAction, onUpdate: NoAction, map: "book_authors_ibfk_2")
 
   @@id([author_id, book_id])
   @@index([book_id], map: "book_id")
@@ -73,24 +72,6 @@ model book_copys {
   readers          readers[]
 
   @@index([book_id], map: "book_id")
-}
-
-model books {
-  book_id             String           @id @db.VarChar(25)
-  book_title          String           @db.VarChar(200)
-  summary             String?          @db.VarChar(255)
-  total_pages         Int?
-  publishing_year     Int?
-  stored_date         DateTime?        @default(now()) @db.Timestamp(0)
-  cover               String?          @db.VarChar(250)
-  categorie_id        Int
-  publishing_house_id Int
-  book_authors        book_authors[]
-  Categories          Categories       @relation(fields: [categorie_id], references: [categorie_id], onDelete: NoAction, onUpdate: NoAction, map: "books_ibfk_1")
-  publishing_house    publishing_house @relation(fields: [publishing_house_id], references: [publishing_house_id], onDelete: NoAction, onUpdate: NoAction, map: "books_ibfk_2")
-
-  @@index([categorie_id], map: "categorie_id")
-  @@index([publishing_house_id], map: "publishing_house_id")
 }
 
 model indexs {
@@ -122,8 +103,8 @@ model loans {
 
 model managers {
   manager_id Int       @id @default(autoincrement())
-  username   String    @db.VarChar(25)
-  passkey    String    @db.VarChar(50)
+  username   String    @unique(map: "unq_username") @db.VarChar(25)
+  passkey    String?   @db.VarChar(512)
   first_name String    @db.VarChar(25)
   last_name  String    @db.VarChar(25)
   sex        String    @db.VarChar(10)
@@ -147,7 +128,7 @@ model penalty_record {
 model publishing_house {
   publishing_house_id   Int     @id @default(autoincrement())
   publishing_house_name String  @db.VarChar(100)
-  books                 books[]
+  Books                 Books[]
 }
 
 model punishment {
@@ -172,4 +153,22 @@ model readers {
   @@index([copy_id], map: "copy_id")
   @@index([manager_id], map: "manager_id")
   @@index([student_id], map: "student_id")
+}
+
+model Books {
+  book_id             String           @id @db.VarChar(25)
+  book_title          String           @db.VarChar(200)
+  summary             String?          @db.VarChar(255)
+  total_pages         Int?
+  publishing_year     Int?
+  stored_date         DateTime?        @default(now()) @db.Timestamp(0)
+  cover               String?          @db.VarChar(250)
+  categorie_id        Int
+  publishing_house_id Int
+  deleted             Boolean?         @default(false)
+  Categories          Categories       @relation(fields: [categorie_id], references: [categorie_id], onDelete: NoAction, onUpdate: NoAction, map: "books_ibfk_1")
+  publishing_house    publishing_house @relation(fields: [publishing_house_id], references: [publishing_house_id], onDelete: NoAction, onUpdate: NoAction, map: "books_ibfk_2")
+
+  @@index([categorie_id], map: "categorie_id")
+  @@index([publishing_house_id], map: "publishing_house_id")
 }

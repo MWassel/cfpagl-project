@@ -1,30 +1,34 @@
-const express = require("express");
+import express from "express";
+import multer from "multer";
+import path from "path";
+import { requireAuth } from "../middleware/authMiddleware.js";
+
+import { postIndex, patchIndex, getIndexById } from "./indexs.controller.js";
 const router = express.Router();
 
+// Multer configuration (for handling book index uploads)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(process.cwd(), "/assets/book-indexs"));
+  },
+  filename: (req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
+
 // post a indexs
-router.post("/create-indexs", async (req, res) => {
-    // index_id varchar(20) primary key not null,
-    // index_picture varchar(250),
-    // book_id varchar(25) not null,
-    // foreign key (book_id) references Books
-    // (book_id)
-});
+router.post("/create-index", requireAuth, upload.single("index"), postIndex);
 // patch a indexs
-router.patch("/patch-indexs", async (req, res) => {
-    // index_id varchar(20) primary key not null,
-    // index_picture varchar(250),
-    // book_id varchar(25) not null,
-    // foreign key (book_id) references Books
-    // (book_id)
-});
-// deleted a indexs
-router.delete("/delete-indexs", async (req, res) => {
-    // index_id varchar(20) primary key not null,
-    // index_picture varchar(250),
-    // book_id varchar(25) not null,
-    // foreign key (book_id) references Books
-    // (book_id)
-});
+router.patch(
+  "/patch-index/:index_id/:book_id",
+  requireAuth,
+  upload.single("index"),
+  patchIndex
+);
+// get single indexs
+router.get("/get-index/:index_id/:book_id", getIndexById);
 
-
-module.exports = router;
+export default router;
