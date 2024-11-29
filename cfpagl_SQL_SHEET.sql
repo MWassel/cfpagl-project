@@ -116,6 +116,7 @@ email varchar(50)
 );
 
 create table loans (
+    -- routes and controllers done
 loan_id int primary key auto_increment not null,
 loan_start_date timestamp default current_timestamp not null,
 loan_end_date date,
@@ -132,9 +133,11 @@ foreign key (copy_id) references book_copys
 );
 
 create table readers (
+    -- routes and controllers done
 read_session int primary key auto_increment not null,
 entry_time timestamp default current_timestamp not null,
 exit_time timestamp,
+note varchar
 student_id int not null,
 manager_id int not null,
 copy_id varchar(25) not null,
@@ -147,6 +150,7 @@ foreign key (copy_id) references book_copys
 );
 
 create table penalty_record (
+    -- routes and controllers done
 penalty_id int primary key auto_increment not null,
 penalty_start_date timestamp default current_timestamp not null,
 loan_id int not null,

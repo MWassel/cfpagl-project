@@ -1,20 +1,17 @@
-const express = require("express");
+import express from "express";
+import {
+  getPenaltyRecord,
+  postPenaltyRecord,
+  patchPenaltyRecord,
+} from "./penalty_record.controller.js";
+
 const router = express.Router();
 
 // post a pemalty_record
-router.post("/create-pemalty_record", async (req, res) => {
-    // loan_id int not null, FK
-    // punishment_id int not null, FK
-});
+router.post("/create-pemalty_record", postPenaltyRecord);
 // patch a pemalty_record
-router.patch("/patch-pemalty_record", async (req, res) => {
-    // loan_id int not null, FK
-    // punishment_id int not null, FK
-});
+router.patch("/patch-pemalty_record/:penalty_id", patchPenaltyRecord);
 // get pemalty_records
-router.get("/get-pemalty_record", async (req, res) => {
-   // loan_id int not null, FK
-    // punishment_id int not null, FK
-});
+router.get("/get-pemalty_record", getPenaltyRecord);
 
-module.exports = router;
+export default router;

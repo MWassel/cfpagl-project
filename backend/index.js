@@ -15,6 +15,8 @@ import bookAuthorsRoutes from "./src/book_authors/book_authors.route.js";
 import bookIndexRoutes from "./src/indexs/indexs.route.js";
 import managersRoutes from "./src/managers/managers.route.js";
 import loansRoutes from "./src/loans/loans.route.js";
+import readersRoutes from "./src/readers/readers.route.js";
+import penaltyRecordRoutes from "./src/penalty_record/penalty_record.route.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -46,6 +48,8 @@ app.use("/api/book_authors", requireAuth, bookAuthorsRoutes);
 app.use("/api/book_index", bookIndexRoutes);
 app.use("/api/managers", managersRoutes);
 app.use("/api/loans", requireAuth, loansRoutes);
+app.use("/api/readers", requireAuth, readersRoutes);
+app.use("/api/penalty_record", requireAuth, penaltyRecordRoutes);
 
 // Health check
 app.get("/", (req, res) => {

@@ -1,32 +1,13 @@
 import express from "express";
+import { postLoan, patchLoan, getLoans } from "./loans.controller.js";
+
 const router = express.Router();
 
 // post a loan
-router.post("/create-loan", async (req, res) => {
-  // loan_start_date timestamp default current_timestamp not null,
-  // loan_end_date date --INTERED ON RETURN,
-  // note varchar (50),
-  // student_id int not null, FK
-  // manager_id int not null,FK
-  // copy_id varchar(25) not null, FK
-});
+router.post("/create-loan", postLoan);
 // patch a loan
-router.patch("/patch-loan", async (req, res) => {
-  // loan_start_date timestamp default current_timestamp not null,
-  // loan_end_date date --INTERED ON RETURN,
-  // note varchar (50),
-  // student_id int not null, FK
-  // manager_id int not null,FK
-  // copy_id varchar(25) not null, FK
-});
+router.patch("/patch-loan/:loan_id", patchLoan);
 // get loans
-router.get("/get-loan", async (req, res) => {
-  // loan_start_date timestamp default current_timestamp not null,
-  // loan_end_date date --INTERED ON RETURN,
-  // note varchar (50),
-  // student_id int not null, FK
-  // manager_id int not null,FK
-  // copy_id varchar(25) not null, FK
-});
+router.get("/get-loan", getLoans);
 
 export default router;
