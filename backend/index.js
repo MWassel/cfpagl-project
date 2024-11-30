@@ -17,6 +17,7 @@ import managersRoutes from "./src/managers/managers.route.js";
 import loansRoutes from "./src/loans/loans.route.js";
 import readersRoutes from "./src/readers/readers.route.js";
 import penaltyRecordRoutes from "./src/penalty_record/penalty_record.route.js";
+import authRoutes from "./src/auth/auth.route.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -35,7 +36,7 @@ app.use(
 app.get("*", checkUser);
 
 // Routes
-app.use("/api/speciality", requireAuth, specialityRoutes);
+app.use("/api/specialities", requireAuth, specialityRoutes);
 app.use("/api/branch", requireAuth, branchRoutes);
 app.use("/api/student", requireAuth, studentRoutes);
 app.use("/api/author", requireAuth, authorRoutes);
@@ -46,10 +47,11 @@ app.use("/api/book", bookRoutes);
 app.use("/api/book_copys", requireAuth, bookCopysRoutes);
 app.use("/api/book_authors", requireAuth, bookAuthorsRoutes);
 app.use("/api/book_index", bookIndexRoutes);
-app.use("/api/managers", managersRoutes);
+app.use("/api/managers", requireAuth, managersRoutes);
 app.use("/api/loans", requireAuth, loansRoutes);
 app.use("/api/readers", requireAuth, readersRoutes);
 app.use("/api/penalty_record", requireAuth, penaltyRecordRoutes);
+app.use("/api/auth", authRoutes);
 
 // Health check
 app.get("/", (req, res) => {

@@ -36,7 +36,7 @@ router.patch("/patch-book/", requireAuth, upload.single("cover"), patchBook);
 router.delete("/delete-book/:book_id", requireAuth, deleteBook);
 
 // get books
-router.get("/get-book", getBook);
+router.get("/", getBook);
 
 // get single book
 router.get("/get-book/:book_id", getBookByID);

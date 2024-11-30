@@ -5,11 +5,14 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper/modules";
+import { useFetchSpecialitiesQuery } from "../../redux/features/specialities/specialitiesApi";
 
 export const TrendingBooks = () => {
   const categories = ["all", "business", "adventure", "fiction", "horror"];
   const [books, setBooks] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  // const { data: specialities } = useFetchSpecialitiesQuery();
+  // console.log(specialities);
   useEffect(() => {
     fetch("books.json")
       .then((res) => res.json())

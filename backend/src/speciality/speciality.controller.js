@@ -29,10 +29,11 @@ const postSpeciality = async (req, res) => {
 
 const patchSpeciality = async (req, res) => {
   try {
-    const { speciality_id, speciality, training_duration, training_type } =
-      req.body;
+    const { id } = req.params;
+    const speciality_id = id;
+    const { speciality, training_duration, training_type } = req.body;
 
-    if (!speciality_id || !speciality || !training_duration || !training_type) {
+    if (!speciality || !training_duration || !training_type) {
       return res.status(400).json({ error: "All fields are required." });
     }
 

@@ -11,9 +11,9 @@ const router = express.Router();
 router.post("/create-speciality", postSpeciality);
 
 // Get a speciality
-router.get("/get-speciality", getSpeciality);
+router.get("/", getSpeciality);
 
 // Patch a speciality
-router.patch("/patch-speciality", patchSpeciality);
+router.patch("/patch-speciality/:id", patchSpeciality);
 
 export default router;
