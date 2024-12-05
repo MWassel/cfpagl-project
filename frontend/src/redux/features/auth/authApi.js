@@ -27,9 +27,19 @@ const authApi = createApi({
     logoutManager: builder.query({
       query: () => "/logout-manager",
     }),
+    validate: builder.query({
+      query: () => "/validate",
+      transformResponse: (response) => {
+        return { isAuthenticated: response?.valid || false };
+      },
+    }),
   }),
 });
 
-export const { useLoginManagerMutation, useLogoutManagerQuery } = authApi;
+export const {
+  useLoginManagerMutation,
+  useLogoutManagerQuery,
+  useValidateQuery,
+} = authApi;
 
 export default authApi;

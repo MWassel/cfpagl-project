@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
 import cookieParser from "cookie-parser";
 import { requireAuth, checkUser } from "./src/middleware/authMiddleware.js";
 import specialityRoutes from "./src/speciality/speciality.route.js";
@@ -43,7 +44,7 @@ app.use("/api/author", requireAuth, authorRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/publishing", requireAuth, publishingRoutes);
 app.use("/api/punishment", requireAuth, punishmentRoutes);
-app.use("/api/book", bookRoutes);
+app.use("/api/books", bookRoutes);
 app.use("/api/book_copys", requireAuth, bookCopysRoutes);
 app.use("/api/book_authors", requireAuth, bookAuthorsRoutes);
 app.use("/api/book_index", bookIndexRoutes);
@@ -52,6 +53,15 @@ app.use("/api/loans", requireAuth, loansRoutes);
 app.use("/api/readers", requireAuth, readersRoutes);
 app.use("/api/penalty_record", requireAuth, penaltyRecordRoutes);
 app.use("/api/auth", authRoutes);
+
+app.use(
+  "/assets/book-covers",
+  express.static(path.join(process.cwd(), "/assets/book-covers"))
+);
+app.use(
+  "/assets/book-indexs",
+  express.static(path.join(process.cwd(), "/assets/book-indexs"))
+);
 
 // Health check
 app.get("/", (req, res) => {

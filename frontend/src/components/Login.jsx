@@ -20,10 +20,10 @@ export const Login = () => {
     try {
       const response = await login(data).unwrap(); // Call the login mutation
       localStorage.setItem("jwt", response.token); // Store the token manually
-      setMessage("Login successful!");
+      navigate("/dashboard");
+      // setMessage("Login successful!");
 
       // Redirect to the admin page
-      navigate("/dashboard"); // Redirect to your admin page (you can change the path as needed)
     } catch (error) {
       setMessage(error?.data?.error || "Login failed. Please try again.");
     }

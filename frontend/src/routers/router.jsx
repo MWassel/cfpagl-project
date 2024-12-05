@@ -3,8 +3,11 @@ import App from "../App.jsx";
 import { Home } from "../pages/home/home.jsx";
 import { Login } from "../components/Login.jsx";
 import SingleBook from "../pages/books/singleBook.jsx";
-import ProtectedRoute from "./privateRoute.jsx"; // Make sure to import your ProtectedRoute
+import ProtectedRoute from "./privateRoute.jsx";
 import Dashboard from "../pages/dashboard/Dashboard.jsx";
+import DashboardLayout from "../pages/dashboard/DashboardLayout.jsx";
+import ManageBooks from "../pages/dashboard/manageBooks/manageBooks.jsx";
+import AddBook from "../pages/dashboard/addBook/AddBook.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,13 +26,31 @@ const router = createBrowserRouter([
         path: "/books/:book_id",
         element: <SingleBook />,
       },
+    ],
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
       {
-        path: "/dashboard",
-        element: (
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        ),
+        path: "",
+        element: <Dashboard />,
+      },
+      {
+        path: "add-new-book",
+        element: <AddBook />,
+      },
+      {
+        path: "edit-book/:id",
+        element: <div>edit book</div>,
+      },
+      {
+        path: "manage-books",
+        element: <ManageBooks />,
       },
     ],
   },

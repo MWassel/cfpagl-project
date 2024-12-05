@@ -1,22 +1,30 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext } from "react";
+import { useValidateQuery } from "../redux/features/auth/authApi";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem("jwt"));
+  const { data, isLoading, error } = useValidateQuery();
+  console.log(data);
+  const isAuthenticated = data?.isAuthenticated || false;
+  console.log(isAuthenticated);
 
-  const login = (newToken) => {
-    localStorage.setItem("jwt", newToken);
-    setToken(newToken);
-  };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  const logout = () => {
-    localStorage.removeItem("jwt");
-    setToken(null);
-  };
+  if (error) {
+    console.error("Authentication validation failed:", error);
+    // Return the context with `isAuthenticated: false` even on error
+    return (
+      <AuthContext.Provider value={{ isAuthenticated: false }}>
+        {children}
+      </AuthContext.Provider>
+    );
+  }
 
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

@@ -7,7 +7,7 @@ export const requireAuth = (req, res, next) => {
     jwt.verify(token, "cfpagl secret", (err, decodedToken) => {
       if (err) {
         console.log(err.message);
-        res.redirect("/login");
+        // res.redirect("/login");
       } else {
         console.log(decodedToken);
         next();

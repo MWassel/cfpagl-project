@@ -42,4 +42,8 @@ const logoutManager = async (req, res) => {
   }
 };
 
-export { loginManager, logoutManager };
+const validateToken = async (req, res) => {
+  res.status(200).json({ valid: true });
+};
+
+export { loginManager, logoutManager, validateToken };

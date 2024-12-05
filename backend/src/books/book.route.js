@@ -30,10 +30,15 @@ const upload = multer({ storage });
 router.post("/create-book", requireAuth, upload.single("cover"), postBook);
 
 // patch a book
-router.patch("/patch-book/", requireAuth, upload.single("cover"), patchBook);
+router.patch(
+  "/patch-book/:book_id",
+  requireAuth,
+  upload.single("cover"),
+  patchBook
+);
 
 // delete a book
-router.delete("/delete-book/:book_id", requireAuth, deleteBook);
+router.patch("/delete-book/:book_id", requireAuth, deleteBook);
 
 // get books
 router.get("/", getBook);

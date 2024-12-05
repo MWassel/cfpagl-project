@@ -13,13 +13,28 @@ const getBook = async (req, res) => {
 const getBookByID = async (req, res) => {
   try {
     const { book_id } = req.params;
+
+    // Fetch book data from the database
     const bookGET = await prismaClient.books.findUnique({
       where: { book_id: book_id },
     });
+
     if (!bookGET) {
       return res.status(404).json({ error: "Book not found." });
     }
-    return res.status(200).json(bookGET);
+
+    const imageUrl = bookGET.cover
+      ? `${req.protocol}://${req.get("host")}/assets/book-covers/${
+          bookGET.cover
+        }`
+      : null;
+
+    return res.status(200).json({
+      book_id: bookGET.book_id,
+      title: bookGET.book_title,
+      category: bookGET.categorie_id,
+      imageUrl: imageUrl,
+    });
   } catch (error) {
     console.error("Error finding a book:", error);
     return res.status(500).json({ error: "Internal Server Error." });
@@ -70,8 +85,8 @@ const postBook = async (req, res) => {
 
 const patchBook = async (req, res) => {
   try {
+    const { book_id } = req.params;
     const {
-      book_id,
       book_title,
       summary,
       total_pages,
@@ -109,9 +124,13 @@ const patchBook = async (req, res) => {
 const deleteBook = async (req, res) => {
   try {
     const { book_id } = req.params;
-    const bookDELETE = await prismaClient.books.delete({
+    console.log("Book ID received:", book_id);
+    const bookDELETE = await prismaClient.books.update({
       where: {
         book_id: book_id,
+      },
+      data: {
+        deleted: true,
       },
     });
     return res.status(200).json(bookDELETE);
