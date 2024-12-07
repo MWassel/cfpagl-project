@@ -5,9 +5,8 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const { data, isLoading, error } = useValidateQuery();
-  console.log(data);
-  const isAuthenticated = data?.isAuthenticated || false;
-  console.log(isAuthenticated);
+
+  const isAuthenticated = data?.valid || false;
 
   if (isLoading) {
     return <div>Loading...</div>;

@@ -23,22 +23,57 @@ const authApi = createApi({
         method: "POST",
         body: credentials,
       }),
+      // Add invalidation and potentially transform response
+      invalidatesTags: ["Auth"],
+      transformResponse: (response) => {
+        console.log("Login mutation response:", response);
+        return {
+          success: true,
+          user: response.user || null,
+          // Add token if needed
+        };
+      },
+      transformErrorResponse: (response) => {
+        console.log("Login mutation error:", response);
+        return {
+          success: false,
+          error: response.error || "Login failed",
+        };
+      },
     }),
-    logoutManager: builder.query({
-      query: () => "/logout-manager",
+    logoutManager: builder.mutation({
+      // Change to mutation for better practice
+      query: () => ({
+        url: "/logout-manager",
+        method: "POST",
+      }),
+      // Clear token on logout
+      onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          localStorage.removeItem("jwt");
+          // Optional: dispatch an action to reset auth state
+        } catch (error) {
+          console.error("Logout failed", error);
+        }
+      },
+      invalidatesTags: ["Auth"],
     }),
     validate: builder.query({
       query: () => "/validate",
-      transformResponse: (response) => {
-        return { isAuthenticated: response?.valid || false };
-      },
+      transformResponse: (response) => ({
+        valid: response?.valid || false,
+        user: response?.user || null,
+      }),
+      // Add caching and invalidation
+      providesTags: ["Auth"],
     }),
   }),
 });
 
 export const {
   useLoginManagerMutation,
-  useLogoutManagerQuery,
+  useLogoutManagerMutation, // Changed from Query to Mutation
   useValidateQuery,
 } = authApi;
 
