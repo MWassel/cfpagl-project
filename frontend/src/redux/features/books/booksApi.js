@@ -27,14 +27,17 @@ const booksApi = createApi({
         url: "/create-book",
         method: "POST",
         body: newBook,
+        // Important: don't set content-type header to allow browser to set it with FormData
+        formData: true,
       }),
       invalidatesTags: ["Books"],
     }),
     updateBook: builder.mutation({
-      query: (id, updatedBook) => ({
+      query: ({ id, updatedBook }) => ({
         url: `/patch-book/${id}`,
         method: "PATCH",
         body: updatedBook,
+        formData: true,
       }),
       invalidatesTags: ["Books"],
     }),

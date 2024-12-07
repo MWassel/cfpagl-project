@@ -222,8 +222,7 @@ function DashboardLayout() {
         <main className="p-6 sm:p-10 space-y-6 ">
           <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
             <div className="mr-6">
-              <h1 className="text-4xl font-semibold mb-2">Dashboard</h1>
-              <h2 className="text-gray-600 ml-0.5">Book Store Inventory</h2>
+              <h1 className="text-4xl font-semibold mb-2">لوحة التحكم</h1>
             </div>
             <div className="flex flex-col md:flex-row items-start justify-end -mb-3">
               <Link
@@ -244,7 +243,7 @@ function DashboardLayout() {
                     d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
                   />
                 </svg>
-                Manage Books
+                إدارة الكتب
               </Link>
               <Link
                 to="/dashboard/add-new-book"
@@ -264,7 +263,7 @@ function DashboardLayout() {
                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                   />
                 </svg>
-                Add New Book
+                إضافة كتاب
               </Link>
             </div>
           </div>

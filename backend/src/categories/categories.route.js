@@ -16,6 +16,6 @@ router.patch("/patch-categorie", requireAuth, patchCategory);
 // deleted a categorie
 router.delete("/delete-categorie", requireAuth, deleteCategory);
 // get categories
-router.get("/get-categorie", getCategories);
+router.get("/", getCategories);
 
 export default router;

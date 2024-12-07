@@ -32,6 +32,10 @@ const getBookByID = async (req, res) => {
     return res.status(200).json({
       book_id: bookGET.book_id,
       title: bookGET.book_title,
+      summary: bookGET.summary,
+      total_pages: bookGET.total_pages,
+      publishing_year: bookGET.publishing_year,
+      pubHouseId: bookGET.publishing_house_id,
       category: bookGET.categorie_id,
       imageUrl: imageUrl,
     });
@@ -95,18 +99,11 @@ const patchBook = async (req, res) => {
       publishing_house_id,
     } = req.body;
 
-    if (!req.file) {
-      return res.status(400).json({ error: "Book cover is required." });
-    }
-
-    const cover = req.file.path;
-
     const bookPATCH = await prismaClient.books.update({
       where: { book_id: book_id },
       data: {
         book_title,
         summary,
-        cover,
         total_pages: parseInt(total_pages),
         publishing_year: parseInt(publishing_year),
         categorie_id: parseInt(categorie_id),
