@@ -19,6 +19,7 @@ import loansRoutes from "./src/loans/loans.route.js";
 import readersRoutes from "./src/readers/readers.route.js";
 import penaltyRecordRoutes from "./src/penalty_record/penalty_record.route.js";
 import authRoutes from "./src/auth/auth.route.js";
+import statsRoutes from "./src/stats/stats.route.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -53,6 +54,7 @@ app.use("/api/loans", requireAuth, loansRoutes);
 app.use("/api/readers", requireAuth, readersRoutes);
 app.use("/api/penalty_record", requireAuth, penaltyRecordRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/stats", requireAuth, statsRoutes);
 
 app.use(
   "/assets/book-covers",

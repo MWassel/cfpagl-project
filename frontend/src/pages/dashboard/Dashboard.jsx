@@ -1,13 +1,90 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Loading from "../../components/Loading";
 import { useNavigate, Link } from "react-router-dom";
 import { MdOutlineManageHistory, MdIncompleteCircle } from "react-icons/md";
 import RevenueChart from "./RevenueChart";
+import axios from "axios";
+import baseUrl from "../../utils/baseUrl";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({});
+  const [totalBooks, setTotalBooks] = useState(0);
+  const [totalBookCopies, setTotalBookCopies] = useState(0);
+  const [totalStudents, setTotalStudents] = useState(0);
+  const [totalLoans, setTotalLoans] = useState(0);
   const navigate = useNavigate();
+
+  const fetchTotalBooks = async () => {
+    setLoading(true);
+    axios
+      .get(`${baseUrl()}/api/stats/total-books`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setTotalBooks(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  const fetchTotalBookCopies = async () => {
+    setLoading(true);
+    axios
+      .get(`${baseUrl()}/api/stats/total-copies`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setTotalBookCopies(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  const fetchTotalStudents = async () => {
+    setLoading(true);
+    axios
+      .get(`${baseUrl()}/api/stats/total-students`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setTotalStudents(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  const fetchTotalLoans = async () => {
+    setLoading(true);
+    axios
+      .get(`${baseUrl()}/api/stats/total-loans`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setTotalLoans(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchTotalBooks();
+    fetchTotalBookCopies();
+    fetchTotalStudents();
+    fetchTotalLoans();
+  }, [totalBooks, totalBookCopies, totalStudents, totalLoans]);
 
   if (loading) {
     return <Loading />;
@@ -34,8 +111,8 @@ const Dashboard = () => {
             </svg>
           </div>
           <div>
-            <span className="block text-2xl font-bold">{data?.totalBooks}</span>
-            <span className="block text-gray-500">Products</span>
+            <span className="block text-2xl font-bold">{totalBooks}</span>
+            <span className="block text-gray-500">عدد الكتب</span>
           </div>
         </div>
         <div className="flex items-center p-8 bg-white shadow rounded-lg">
@@ -45,21 +122,39 @@ const Dashboard = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className="h-6 w-6"
+              className="h-8 w-8"
             >
-              <path
+              <rect
+                x="6"
+                y="9"
+                width="12"
+                height="8"
+                rx="1"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                strokeWidth="1.5"
+              />
+              <rect
+                x="8"
+                y="4"
+                width="8"
+                height="5"
+                rx="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+              />
+              <path
+                d="M8 14h8v4H8z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
               />
             </svg>
           </div>
           <div>
-            <span className="block text-2xl font-bold">
-              ${data?.totalSales}
-            </span>
-            <span className="block text-gray-500">Total Sales</span>
+            <span className="block text-2xl font-bold">{totalBookCopies}</span>
+            <span className="block text-gray-500">عدد النسخ</span>
           </div>
         </div>
         <div className="flex items-center p-8 bg-white shadow rounded-lg">
@@ -69,26 +164,29 @@ const Dashboard = () => {
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
-              className="h-6 w-6"
+              className="h-8 w-8"
             >
               <path
+                d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6z"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
+                strokeWidth="1.5"
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
               />
             </svg>
           </div>
           <div>
             <span className="inline-block text-2xl font-bold">
-              {data?.trendingBooks}
+              {totalStudents}
             </span>
-            <span className="inline-block text-xl text-gray-500 font-semibold">
-              (13%)
-            </span>
-            <span className="block text-gray-500">
-              Trending Books in This Month
-            </span>
+            <span className="block text-gray-500">عدد المنخرطين</span>
           </div>
         </div>
         <div className="flex items-center p-8 bg-white shadow rounded-lg">
@@ -96,10 +194,8 @@ const Dashboard = () => {
             <MdIncompleteCircle className="size-6" />
           </div>
           <div>
-            <span className="block text-2xl font-bold">
-              {data?.totalOrders}
-            </span>
-            <span className="block text-gray-500">Total Orders</span>
+            <span className="block text-2xl font-bold">{totalLoans}</span>
+            <span className="block text-gray-500">عدد الإعارات</span>
           </div>
         </div>
       </section>
