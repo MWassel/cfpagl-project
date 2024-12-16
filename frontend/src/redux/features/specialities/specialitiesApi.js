@@ -27,6 +27,7 @@ const specialitiesApi = createApi({
         url: "/create-speciality",
         method: "POST",
         body: newSpeciality,
+        formData: true,
       }),
       invalidatesTags: ["Specialities"],
     }),

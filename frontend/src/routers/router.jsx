@@ -9,6 +9,7 @@ import DashboardLayout from "../pages/dashboard/DashboardLayout.jsx";
 import ManageBooks from "../pages/dashboard/manageBooks/manageBooks.jsx";
 import AddBook from "../pages/dashboard/addBook/AddBook.jsx";
 import UpdateBook from "../pages/dashboard/editBook/UpdateBook.jsx";
+import AddSpeciality from "../pages/dashboard/addSpecialities/AddSpeciality.jsx";
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "manage-books",
         element: <ManageBooks />,
+      },
+      {
+        path: "Specialities",
+        element: <AddSpeciality />,
       },
     ],
   },

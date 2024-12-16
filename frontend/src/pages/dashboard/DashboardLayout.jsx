@@ -1,21 +1,48 @@
 import React, { useState } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import Loading from "../../components/Loading";
-import { HiViewGridAdd } from "react-icons/hi";
-import { MdOutlineManageHistory, MdIncompleteCircle } from "react-icons/md";
+import axios from "axios";
+import baseUrl from "../../utils/baseUrl";
+import {
+  HiViewGridAdd,
+  HiAcademicCap,
+  HiOutlineClipboardList,
+  HiOutlineChartBar,
+  HiOutlineAcademicCap,
+  HiOutlineCog,
+  HiOutlineDocumentText,
+  HiOutlineClipboardCheck,
+  HiOutlineLibrary,
+  HiOutlineUserGroup,
+  HiOutlinePresentationChartLine,
+  HiOutlineMailOpen,
+  HiOutlineCalendar,
+  HiOutlineCreditCard,
+} from "react-icons/hi";
 import favIcon from "../../assets/fav-icon.png";
+import Avatar from "../../assets/avatar.png";
 
 import { useAuth } from "../../context/authContext";
 import { Navigate } from "react-router-dom";
 
 function DashboardLayout() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  const handleLogout = () => {};
+  const handleLogout = () => {
+    axios
+      .get(`${baseUrl()}/api/auth/logout-manager`, { withCredentials: true })
+      .then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+      })
+      .catch((error) => {
+        console.error("Logout failed:", error);
+      });
+  };
 
   return (
     <section className="flex md:bg-gray-100 min-h-screen overflow-hidden">
@@ -28,45 +55,19 @@ function DashboardLayout() {
         </a>
         <div className="flex-grow flex flex-col justify-between text-gray-500 bg-gray-800">
           <nav className="flex flex-col mx-4 my-6 space-y-4">
-            <a
-              href="#"
-              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
-            >
-              <span className="sr-only">Folders</span>
-              <svg
-                aria-hidden="true"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
-                />
-              </svg>
-            </a>
             <Link
               to="/dashboard"
               className="inline-flex items-center justify-center py-3 text-purple-600 bg-white rounded-lg"
             >
               <span className="sr-only">Dashboard</span>
-              <svg
-                aria-hidden="true"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
+              <HiOutlineChartBar className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/Specialities"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Specialities</span>
+              <HiAcademicCap className="h-6 w-6" />
             </Link>
             <Link
               to="/dashboard/add-new-book"
@@ -79,33 +80,77 @@ function DashboardLayout() {
               to="/dashboard/manage-books"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
+              <span className="sr-only">Manage Books</span>
+              <HiOutlineClipboardList className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/students"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Students</span>
+              <HiOutlineUserGroup className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/courses"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Courses</span>
+              <HiOutlineAcademicCap className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/documents"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
               <span className="sr-only">Documents</span>
-              <MdOutlineManageHistory className="h-6 w-6" />
+              <HiOutlineDocumentText className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/library"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Library</span>
+              <HiOutlineLibrary className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/reports"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Reports</span>
+              <HiOutlinePresentationChartLine className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/tasks"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Tasks</span>
+              <HiOutlineClipboardCheck className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/messages"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Messages</span>
+              <HiOutlineMailOpen className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/calendar"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Calendar</span>
+              <HiOutlineCalendar className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/billing"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">Billing</span>
+              <HiOutlineCreditCard className="h-6 w-6" />
             </Link>
           </nav>
           <div className="inline-flex items-center justify-center h-20 w-20 border-t border-gray-700">
             <button className="p-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
               <span className="sr-only">Settings</span>
-              <svg
-                aria-hidden="true"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
+              <HiOutlineCog className="h-6 w-6" />
             </button>
           </div>
         </div>
@@ -150,52 +195,25 @@ function DashboardLayout() {
             />
           </div>
           <div className="flex flex-shrink-0 items-center ml-auto">
-            <button className="inline-flex items-center p-2 hover:bg-gray-100 focus:bg-gray-100 rounded-lg">
+            <div className="inline-flex items-center p-2rounded-lg">
               <span className="sr-only">User Menu</span>
               <div className="hidden md:flex md:flex-col md:items-end md:leading-tight">
-                <span className="font-semibold">Grace Simmons</span>
-                <span className="text-sm text-gray-600">Lecturer</span>
+                <span className="font-semibold">
+                  {user ? `${user.username}` : "User"}
+                </span>
+                <span className="text-xs text-gray-400">
+                  {user ? ` ID: ${user.id}` : "id"}
+                </span>
               </div>
               <span className="h-12 w-12 ml-2 sm:ml-3 mr-2 bg-gray-100 rounded-full overflow-hidden">
                 <img
-                  src="https://randomuser.me/api/portraits/women/68.jpg"
+                  src={Avatar}
                   alt="user profile photo"
                   className="h-full w-full object-cover"
                 />
               </span>
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="hidden sm:block h-6 w-6 text-gray-300"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
+            </div>
             <div className="border-l pl-3 ml-3 space-x-1">
-              <button className="relative p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:bg-gray-100 focus:text-gray-600 rounded-full">
-                <span className="sr-only">Notifications</span>
-                <span className="absolute top-0 right-0 h-2 w-2 mt-1 mr-2 bg-red-500 rounded-full"></span>
-                <span className="absolute top-0 right-0 h-2 w-2 mt-1 mr-2 bg-red-500 rounded-full animate-ping"></span>
-                <svg
-                  aria-hidden="true"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  className="h-6 w-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
-                  />
-                </svg>
-              </button>
               <button
                 onClick={handleLogout}
                 className="relative p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:bg-gray-100 focus:text-gray-600 rounded-full"
