@@ -10,6 +10,7 @@ import ManageBooks from "../pages/dashboard/manageBooks/manageBooks.jsx";
 import AddBook from "../pages/dashboard/addBook/AddBook.jsx";
 import UpdateBook from "../pages/dashboard/editBook/UpdateBook.jsx";
 import AddSpeciality from "../pages/dashboard/addSpecialities/AddSpeciality.jsx";
+import AddBranch from "../pages/dashboard/addBranch/addBranch.jsx";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "Specialities",
         element: <AddSpeciality />,
+      },
+      {
+        path: "Branches",
+        element: <AddBranch />,
       },
     ],
   },

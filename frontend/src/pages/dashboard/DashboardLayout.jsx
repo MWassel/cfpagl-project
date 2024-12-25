@@ -18,6 +18,8 @@ import {
   HiOutlineCalendar,
   HiOutlineCreditCard,
 } from "react-icons/hi";
+import { SiGoogleclassroom } from "react-icons/si";
+
 import favIcon from "../../assets/fav-icon.png";
 import Avatar from "../../assets/avatar.png";
 
@@ -70,11 +72,11 @@ function DashboardLayout() {
               <HiAcademicCap className="h-6 w-6" />
             </Link>
             <Link
-              to="/dashboard/add-new-book"
+              to="/dashboard/Branches"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
               <span className="sr-only">Add Book</span>
-              <HiViewGridAdd className="h-6 w-6" />
+              <SiGoogleclassroom className="h-6 w-6" />
             </Link>
             <Link
               to="/dashboard/manage-books"
