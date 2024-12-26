@@ -11,6 +11,10 @@ import AddBook from "../pages/dashboard/addBook/AddBook.jsx";
 import UpdateBook from "../pages/dashboard/editBook/UpdateBook.jsx";
 import AddSpeciality from "../pages/dashboard/addSpecialities/AddSpeciality.jsx";
 import AddBranch from "../pages/dashboard/addBranch/addBranch.jsx";
+import AddStudent from "../pages/dashboard/addStudent/AddStudent.jsx";
+import AddAuthor from "../pages/dashboard/addAuthor/AddAuthor.jsx";
+import AddCategory from "../pages/dashboard/addCategory/AddCategory.jsx";
+import AddPubHouse from "../pages/dashboard/addPubHouse/AddPubHouse.jsx";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +66,22 @@ const router = createBrowserRouter([
       {
         path: "Branches",
         element: <AddBranch />,
+      },
+      {
+        path: "Students",
+        element: <AddStudent />,
+      },
+      {
+        path: "Authors",
+        element: <AddAuthor />,
+      },
+      {
+        path: "Categories",
+        element: <AddCategory />,
+      },
+      {
+        path: "pubHouses",
+        element: <AddPubHouse />,
       },
     ],
   },

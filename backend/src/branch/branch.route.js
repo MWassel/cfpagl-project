@@ -3,7 +3,7 @@ import { getBranch, patchBranch, postBranch } from "./branch.controller.js";
 const router = express.Router();
 
 // Get a branch
-router.get("/get-branch", getBranch);
+router.get("/", getBranch);
 
 // Post a branch
 router.post("/create-branch", postBranch);

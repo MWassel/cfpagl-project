@@ -6,23 +6,11 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
 import { useNavigate, Link } from "react-router-dom";
-import { useAddBranchMutation } from "../../../redux/features/branch/branchApi";
-function AddBranch() {
-  const [specialities, setSpecialities] = useState([]);
-  const fetchSpecialities = async () => {
-    try {
-      const response = await axios.get(`${baseUrl()}/api/specialities`, {
-        withCredentials: true,
-      });
-      console.log(response);
-      setSpecialities(response.data);
-    } catch (error) {
-      console.error("Error fetching specialities:", error);
-    }
-  };
-  useEffect(() => {
-    fetchSpecialities();
-  }, []);
+
+import { useAddStudentMutation } from "../../../redux/features/student/studentApi";
+
+function AddStudent() {
+  const [branches, setBranches] = useState([]);
   const {
     register,
     handleSubmit,
@@ -30,14 +18,24 @@ function AddBranch() {
     reset,
   } = useForm();
 
-  const [addBranch, { isLoading, isError }] = useAddBranchMutation();
+  const [addStudent, { isLoading, isError }] = useAddStudentMutation();
+
+  const fetchBranches = async () => {
+    try {
+      const response = await axios.get(`${baseUrl()}/api/branch`, {
+        withCredentials: true,
+      });
+      console.log(response);
+      setBranches(response.data);
+    } catch (error) {
+      console.error("Error fetching specialities:", error);
+    }
+  };
+  useEffect(() => {
+    fetchBranches();
+  }, []);
 
   const onSubmit = async (data) => {
-    const formattedData = {
-      ...data,
-      training_start_date: new Date(data.training_start_date).toISOString(),
-      training_end_date: new Date(data.training_end_date).toISOString(),
-    };
     const result = await Swal.fire({
       title: "هل أنت متأكد؟",
       text: "يرجى التأكد من صحة البيانات المدخلة",
@@ -51,10 +49,10 @@ function AddBranch() {
 
     if (result.isConfirmed) {
       try {
-        await addBranch(formattedData).unwrap();
+        await addStudent(data).unwrap();
         Swal.fire({
           title: "نجاح",
-          text: "تم اضافة فرع بنجاح",
+          text: "تم اضافة المتربص بنجاح",
           icon: "success",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -67,14 +65,14 @@ function AddBranch() {
         console.error(error);
         Swal.fire({
           title: "فشل",
-          text: "حدث خطأ أثناء إضافة الفرع",
+          text: "حدث خطأ أثناء إضافة المتربص",
           icon: "error",
         });
       }
     } else {
       Swal.fire({
         title: "إلغاء",
-        text: "لم يتم إضافة الفرع",
+        text: "لم يتم إضافة المتربص",
         icon: "info",
       });
     }
@@ -82,41 +80,70 @@ function AddBranch() {
 
   return (
     <div className="max-w-lg mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">إضافة فرع جديد</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        إضافة متربص جديد
+      </h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputField
-          label="رمز فرع"
-          name="branch_id"
-          placeholder="أدخل رمز فرع"
+          label="رمز المتربص"
+          name="student_id"
+          placeholder="أدخل رمز المتربص"
+          type="number"
           register={register}
           rules={{ required: true }}
         />
 
         <InputField
-          label="تاريخ بدء التكوين"
-          name="training_start_date"
-          placeholder="ادخل تاريخ بدء التكوين"
-          type="date"
+          label="اسم المتربص"
+          name="first_name"
+          placeholder="أدخل اسم المتربص"
           register={register}
           rules={{ required: true }}
         />
 
         <InputField
-          label="تاريخ انتهاء التكوين"
-          name="training_end_date"
-          placeholder="ادخل تاريخ انتهاء التكوين"
+          label="لقب المتربص"
+          name="last_name"
+          placeholder="أدخل لقب المتربص"
+          register={register}
+          rules={{ required: true }}
+        />
+
+        <InputField
+          label="تاريخ الميلاد"
+          name="birth_date"
+          placeholder="أدخل تاريخ الميلاد المتربص"
           type="date"
+          register={register}
+        />
+
+        <InputField
+          label="رقم الجوال"
+          name="phone_number"
+          placeholder="أدخل رقم جوال المتربص (خياري)"
+          register={register}
+        />
+
+        <SelectField
+          label="الجنس"
+          name="sex"
+          options={[
+            { value: "ذكر", label: "ذكر" },
+            { value: "انثى", label: "انثى" },
+            ,
+          ]}
+          type="text"
           register={register}
           rules={{ required: true }}
         />
 
         <SelectField
-          label="التخصص"
-          name="speciality_id"
-          options={specialities.map((speciality) => ({
-            value: speciality.speciality_id,
-            label: speciality.speciality,
+          label="الفرع"
+          name="branch_id"
+          options={branches.map((branch) => ({
+            value: branch.branch_id,
+            label: branch.branch_id,
           }))}
           type="text"
           register={register}
@@ -134,4 +161,4 @@ function AddBranch() {
   );
 }
 
-export default AddBranch;
+export default AddStudent;

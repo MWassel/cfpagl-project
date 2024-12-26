@@ -3,22 +3,21 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
 import {
-  HiViewGridAdd,
   HiAcademicCap,
-  HiOutlineClipboardList,
   HiOutlineChartBar,
-  HiOutlineAcademicCap,
   HiOutlineCog,
-  HiOutlineDocumentText,
   HiOutlineClipboardCheck,
   HiOutlineLibrary,
-  HiOutlineUserGroup,
   HiOutlinePresentationChartLine,
   HiOutlineMailOpen,
   HiOutlineCalendar,
   HiOutlineCreditCard,
 } from "react-icons/hi";
 import { SiGoogleclassroom } from "react-icons/si";
+import { PiStudent } from "react-icons/pi";
+import { FaPencilAlt } from "react-icons/fa";
+import { BiSolidCategory } from "react-icons/bi";
+import { HiLibrary } from "react-icons/hi";
 
 import favIcon from "../../assets/fav-icon.png";
 import Avatar from "../../assets/avatar.png";
@@ -75,36 +74,36 @@ function DashboardLayout() {
               to="/dashboard/Branches"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
-              <span className="sr-only">Add Book</span>
+              <span className="sr-only">Branch</span>
               <SiGoogleclassroom className="h-6 w-6" />
             </Link>
             <Link
-              to="/dashboard/manage-books"
-              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
-            >
-              <span className="sr-only">Manage Books</span>
-              <HiOutlineClipboardList className="h-6 w-6" />
-            </Link>
-            <Link
-              to="/dashboard/students"
+              to="/dashboard/Students"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
               <span className="sr-only">Students</span>
-              <HiOutlineUserGroup className="h-6 w-6" />
+              <PiStudent className="h-6 w-6" />
             </Link>
             <Link
-              to="/dashboard/courses"
+              to="/dashboard/Authors"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
-              <span className="sr-only">Courses</span>
-              <HiOutlineAcademicCap className="h-6 w-6" />
+              <span className="sr-only">Authors</span>
+              <FaPencilAlt className="h-6 w-6" />
             </Link>
             <Link
-              to="/dashboard/documents"
+              to="/dashboard/Categories"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
-              <span className="sr-only">Documents</span>
-              <HiOutlineDocumentText className="h-6 w-6" />
+              <span className="sr-only">Categories</span>
+              <BiSolidCategory className="h-6 w-6" />
+            </Link>
+            <Link
+              to="/dashboard/pubHouses"
+              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
+            >
+              <span className="sr-only">pubHouses</span>
+              <HiLibrary className="h-6 w-6" />
             </Link>
             <Link
               to="/dashboard/library"

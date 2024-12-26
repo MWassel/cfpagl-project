@@ -25,10 +25,10 @@ const postStudent = async (req, res) => {
 
     const studentPOST = await prismaClient.student.create({
       data: {
-        student_id,
+        student_id: parseInt(student_id),
         first_name,
         last_name,
-        birth_date,
+        birth_date: new Date(birth_date),
         phone_number,
         sex,
         branch_id,
