@@ -2,7 +2,9 @@ import prismaClient from "../lib/prismaClient.js";
 
 const getBook = async (req, res) => {
   try {
-    const bookGET = await prismaClient.books.findMany();
+    const bookGET = await prismaClient.books.findMany({
+      where: { deleted: false },
+    });
     res.status(200).json(bookGET);
   } catch (error) {
     console.error("Error getting books:", error);

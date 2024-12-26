@@ -12,8 +12,12 @@ const getBookAuthors = async (req, res) => {
 
 const postBookAuthors = async (req, res) => {
   try {
+    const { author_id, book_id } = req.body;
     const bookAuthorsPOST = await prismaClient.book_authors.create({
-      data: req.body,
+      data: {
+        author_id: parseInt(author_id),
+        book_id: book_id,
+      },
     });
     res.status(200).json(bookAuthorsPOST);
   } catch (error) {

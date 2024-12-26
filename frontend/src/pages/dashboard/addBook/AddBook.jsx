@@ -3,6 +3,7 @@ import InputField from "./InputField";
 import SelectField from "./SelectField";
 import { useForm } from "react-hook-form";
 import { useAddBookMutation } from "../../../redux/features/books/booksApi";
+import { useAddIndexMutation } from "../../../redux/features/index/indexApi.js"; // Assuming this is your index API hook
 import Swal from "sweetalert2";
 import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
@@ -10,6 +11,28 @@ import baseUrl from "../../../utils/baseUrl";
 const AddBook = () => {
   const [categories, setCategories] = useState([]);
   const [pubHouses, setPubHouses] = useState([]);
+  const [bookId, setBookId] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [indexImageFile, setIndexImageFile] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  // Watch bookId field for live updates
+  const watchedBookId = watch("bookId", "");
+
+  // Update bookId state when the watched value changes
+  useEffect(() => {
+    setBookId(watchedBookId);
+  }, [watchedBookId]);
+
+  const [addBook, { isLoading: isBookLoading }] = useAddBookMutation();
+  const [addIndex, { isLoading: isIndexLoading }] = useAddIndexMutation();
 
   const fetchCategories = async () => {
     try {
@@ -48,62 +71,61 @@ const AddBook = () => {
     fetchCategories();
   }, []);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
-
-  const [addBook, { isLoading, isError }] = useAddBookMutation();
-  const [imageFile, setImageFile] = useState(null);
-
-  const onSubmit = async (data) => {
-    // Create FormData to send file and other data
-    const formData = new FormData();
-
-    // Append all text fields
-    formData.append("book_id", data.bookId);
-    formData.append("book_title", data.bookTitle);
-    formData.append("summary", data.summary);
-    formData.append("total_pages", data.totalPages);
-    formData.append("publishing_year", data.PubYear);
-    formData.append("categorie_id", data.Category);
-    formData.append("publishing_house_id", data.pubHouseId);
-
-    // Append the file
-    if (imageFile) {
-      formData.append("cover", imageFile);
-    }
-
-    try {
-      await addBook(formData).unwrap();
-      Swal.fire({
-        title: "نجاح",
-        text: "تم اضافة الكتاب بنجاح",
-        icon: "success",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "تم",
-        cancelButtonText: "اغلاق",
-      });
-      reset();
-      setImageFile(null);
-    } catch (error) {
-      console.error(error);
-      Swal.fire({
-        title: "Error",
-        text: "Failed to add book. Please try again.",
-        icon: "error",
-      });
+  const handleFileChange = (e, type) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (type === "cover") {
+        setImageFile(file);
+      } else if (type === "index") {
+        setIndexImageFile(file);
+      }
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
+  const onSubmit = async (data) => {
+    try {
+      const bookFormData = new FormData();
+      bookFormData.append("book_id", data.bookId);
+      bookFormData.append("book_title", data.bookTitle);
+      bookFormData.append("summary", data.summary);
+      bookFormData.append("total_pages", data.totalPages);
+      bookFormData.append("publishing_year", data.PubYear);
+      bookFormData.append("categorie_id", data.Category);
+      bookFormData.append("publishing_house_id", data.pubHouseId);
+
+      if (imageFile) {
+        bookFormData.append("cover", imageFile);
+      }
+
+      await addBook(bookFormData).unwrap();
+
+      const indexFormData = new FormData();
+      indexFormData.append("index_id", data.indexId);
+      indexFormData.append("book_id", data.bookId);
+
+      if (indexImageFile) {
+        indexFormData.append("index", indexImageFile);
+      }
+
+      await addIndex(indexFormData).unwrap();
+
+      Swal.fire({
+        title: "نجاح",
+        text: "تم اضافة الكتاب والفهرس بنجاح",
+        icon: "success",
+        confirmButtonText: "تم",
+      });
+
+      reset();
+      setImageFile(null);
+      setIndexImageFile(null);
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "خطأ",
+        text: "فشل في اضافة الكتاب او الفهرس",
+        icon: "error",
+      });
     }
   };
 
@@ -111,14 +133,24 @@ const AddBook = () => {
     <div className="max-w-lg mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">إضافة كتاب جديد</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputField
-          label="رمز الكتاب"
-          name="bookId"
-          placeholder="أدخل رمز الكتاب"
-          register={register}
-          rules={{ required: true }}
-        />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <InputField
+            label="رمز الكتاب"
+            name="bookId"
+            placeholder="أدخل رمز الكتاب"
+            register={register}
+            rules={{ required: true }}
+          />
+
+          <InputField
+            label="رمز الفهرس"
+            name="indexId"
+            placeholder={`${bookId ? bookId : "ادخل رمز الفهرس"}`}
+            register={register}
+            rules={{ required: true }}
+          />
+        </div>
 
         <InputField
           label="عنوان الكتاب"
@@ -170,24 +202,40 @@ const AddBook = () => {
           rules={{ required: true }}
         />
 
-        <div className="mb-4">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            صورة الغلاف
-          </label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="mb-2 w-full"
-            required
-          />
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              صورة الغلاف
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, "cover")}
+              className="w-full"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              صورة الفهرس
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileChange(e, "index")}
+              className="w-full"
+              required
+            />
+          </div>
         </div>
 
         <button
           type="submit"
-          className="w-full py-2 bg-green-500 text-white font-bold rounded-md"
+          className="w-full py-2 bg-green-500 text-white font-bold rounded-md hover:bg-green-600 transition-colors"
+          disabled={isBookLoading || isIndexLoading}
         >
-          {isLoading ? "يتم الإضافة.." : "اضافة"}
+          {isBookLoading || isIndexLoading ? "جاري الإضافة..." : "اضافة"}
         </button>
       </form>
     </div>

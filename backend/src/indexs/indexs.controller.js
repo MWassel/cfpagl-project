@@ -15,10 +15,8 @@ const getIndexById = async (req, res) => {
 const postIndex = async (req, res) => {
   try {
     const { index_id, book_id } = req.body;
-    if (!req.file) {
-      return res.status(400).json({ error: "Book index is required." });
-    }
-    const index_picture = req.file.path;
+    const index_picture = req.file?.path || null;
+
     const indexPOST = await prismaClient.indexs.create({
       data: {
         index_id,

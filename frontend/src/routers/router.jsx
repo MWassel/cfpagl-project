@@ -15,6 +15,9 @@ import AddStudent from "../pages/dashboard/addStudent/AddStudent.jsx";
 import AddAuthor from "../pages/dashboard/addAuthor/AddAuthor.jsx";
 import AddCategory from "../pages/dashboard/addCategory/AddCategory.jsx";
 import AddPubHouse from "../pages/dashboard/addPubHouse/AddPubHouse.jsx";
+import AddPunishment from "../pages/dashboard/addPunishment/AddPunishment.jsx";
+import AddBookCopy from "../pages/dashboard/addBookCopy/AddBookCopy.jsx";
+import AddBookAuthors from "../pages/dashboard/addBookAuthors/AddBookAuthors.jsx";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +85,18 @@ const router = createBrowserRouter([
       {
         path: "pubHouses",
         element: <AddPubHouse />,
+      },
+      {
+        path: "Punishments",
+        element: <AddPunishment />,
+      },
+      {
+        path: "BookCopys",
+        element: <AddBookCopy />,
+      },
+      {
+        path: "BookAuthors",
+        element: <AddBookAuthors />,
       },
     ],
   },

@@ -16,7 +16,7 @@ const postPunishment = async (req, res) => {
     const punishmentPOST = await prismaClient.punishment.create({
       data: {
         cause,
-        duration,
+        duration: parseInt(duration),
       },
     });
     return res.status(200).json(punishmentPOST);

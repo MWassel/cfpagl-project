@@ -8,6 +8,6 @@ router.post("/create-author", postAuthor);
 // patch a author
 router.patch("/patch-author", patchAuthor);
 // get authors
-router.get("/get-author", getAuthor);
+router.get("/", getAuthor);
 
 export default router;

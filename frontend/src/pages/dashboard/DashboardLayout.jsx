@@ -6,9 +6,6 @@ import {
   HiAcademicCap,
   HiOutlineChartBar,
   HiOutlineCog,
-  HiOutlineClipboardCheck,
-  HiOutlineLibrary,
-  HiOutlinePresentationChartLine,
   HiOutlineMailOpen,
   HiOutlineCalendar,
   HiOutlineCreditCard,
@@ -18,6 +15,9 @@ import { PiStudent } from "react-icons/pi";
 import { FaPencilAlt } from "react-icons/fa";
 import { BiSolidCategory } from "react-icons/bi";
 import { HiLibrary } from "react-icons/hi";
+import { AiOutlineStop } from "react-icons/ai";
+import { LuPrinter } from "react-icons/lu";
+import { FaBookReader } from "react-icons/fa";
 
 import favIcon from "../../assets/fav-icon.png";
 import Avatar from "../../assets/avatar.png";
@@ -106,25 +106,25 @@ function DashboardLayout() {
               <HiLibrary className="h-6 w-6" />
             </Link>
             <Link
-              to="/dashboard/library"
+              to="/dashboard/Punishments"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
-              <span className="sr-only">Library</span>
-              <HiOutlineLibrary className="h-6 w-6" />
+              <span className="sr-only">punishment</span>
+              <AiOutlineStop className="h-6 w-6" />
             </Link>
             <Link
-              to="/dashboard/reports"
+              to="/dashboard/BookCopys"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
-              <span className="sr-only">Reports</span>
-              <HiOutlinePresentationChartLine className="h-6 w-6" />
+              <span className="sr-only">BookCopys</span>
+              <LuPrinter className="h-6 w-6" />
             </Link>
             <Link
-              to="/dashboard/tasks"
+              to="/dashboard/BookAuthors"
               className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
             >
-              <span className="sr-only">Tasks</span>
-              <HiOutlineClipboardCheck className="h-6 w-6" />
+              <span className="sr-only">BookAuthors</span>
+              <FaBookReader className="h-6 w-6" />
             </Link>
             <Link
               to="/dashboard/messages"

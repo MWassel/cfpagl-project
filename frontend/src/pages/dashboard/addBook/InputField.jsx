@@ -3,6 +3,7 @@ import React from "react";
 const InputField = ({
   label,
   name,
+  value,
   type = "text",
   register,
   placeholder,
@@ -15,6 +16,7 @@ const InputField = ({
       </label>
       <input
         type={type}
+        value={value}
         {...register(name, { required: required })}
         className=" p-2 border w-full rounded-md focus:outline-none focus:ring focus:border-blue-300"
         placeholder={placeholder}
