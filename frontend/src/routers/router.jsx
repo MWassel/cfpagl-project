@@ -18,6 +18,9 @@ import AddPubHouse from "../pages/dashboard/addPubHouse/AddPubHouse.jsx";
 import AddPunishment from "../pages/dashboard/addPunishment/AddPunishment.jsx";
 import AddBookCopy from "../pages/dashboard/addBookCopy/AddBookCopy.jsx";
 import AddBookAuthors from "../pages/dashboard/addBookAuthors/AddBookAuthors.jsx";
+import AddLoan from "../pages/dashboard/addLoan/AddLoan.jsx";
+import ReturnBook from "../pages/dashboard/returnBooks/ReturnBook.jsx";
+import AddPenaltys from "../pages/dashboard/addPenaltys/AddPenaltys.jsx";
 
 const router = createBrowserRouter([
   {
@@ -97,6 +100,18 @@ const router = createBrowserRouter([
       {
         path: "BookAuthors",
         element: <AddBookAuthors />,
+      },
+      {
+        path: "Land-book",
+        element: <AddLoan />,
+      },
+      {
+        path: "Return-book",
+        element: <ReturnBook />,
+      },
+      {
+        path: "Penaltys",
+        element: <AddPenaltys />,
       },
     ],
   },

@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from "react";
 import InputField from "../addBook/InputField";
-import SelectField from "../addBook/SelectField";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
 import { useNavigate, Link } from "react-router-dom";
-import { useAddBookCopyMutation } from "../../../redux/features/bookCopy/bookCopyApi";
+import { useAddPenaltyMutation } from "../../../redux/features/penaltys/penaltys";
+import SelectField from "../addBook/SelectField";
+function AddPenaltys() {
+  const [punishments, setPunishments] = useState([]);
 
-function AddBookCopy() {
-  const [books, setBooks] = useState([]);
-
-  const fetchBooks = async () => {
+  const fetchPunishments = async () => {
     try {
-      const response = await axios.get(`${baseUrl()}/api/books`);
-      setBooks(response.data);
+      const response = await axios.get(`${baseUrl()}/api/punishment`, {
+        withCredentials: true,
+      });
+      console.log(response.data);
+      setPunishments(response.data);
     } catch (error) {
-      console.error("Error fetching books:", error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    fetchBooks();
+    fetchPunishments();
   }, []);
 
   const {
@@ -31,7 +33,7 @@ function AddBookCopy() {
     reset,
   } = useForm();
 
-  const [addBookCopy, { isLoading, isError }] = useAddBookCopyMutation();
+  const [addPenalty, { isLoading, isError }] = useAddPenaltyMutation();
 
   const onSubmit = async (data) => {
     const result = await Swal.fire({
@@ -47,10 +49,10 @@ function AddBookCopy() {
 
     if (result.isConfirmed) {
       try {
-        await addBookCopy(data).unwrap();
+        await addPenalty(data).unwrap();
         Swal.fire({
           title: "نجاح",
-          text: "تم اضافة نسخة كتاب  بنجاح",
+          text: "تم اضافة العقوبة بنجاح",
           icon: "success",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -63,14 +65,14 @@ function AddBookCopy() {
         console.error(error);
         Swal.fire({
           title: "فشل",
-          text: "حدث خطأ أثناء إضافة نسخة كتاب",
+          text: "حدث خطأ أثناء إضافة العقوبة",
           icon: "error",
         });
       }
     } else {
       Swal.fire({
         title: "إلغاء",
-        text: "لم يتم إضافة نسخة كتاب",
+        text: "لم يتم إضافة العقوبة",
         icon: "info",
       });
     }
@@ -78,45 +80,24 @@ function AddBookCopy() {
 
   return (
     <div className="max-w-lg mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">
-        إضافة نسخة كتاب جديد
-      </h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">إلقاء عقوبة</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputField
-          label="رمز النسخة"
-          name="copy_id"
-          placeholder="أدخل رمز النسخة"
-          register={register}
-          rules={{ required: true }}
-        />
-
-        <InputField
-          label="رقم الجرد"
-          name="inventory_number"
-          placeholder="ادخل رقم الجرد"
+          label="رمز الإعارة"
+          name="loan_id"
           type="number"
           register={register}
-          rules={{ required: true }}
-        />
-
-        <InputField
-          label="الموقع في المكتبة"
-          name="location"
-          placeholder="ادخل الموقع في المكتبة"
-          register={register}
-          rules={{ required: true }}
+          required
         />
 
         <SelectField
-          label="رمز الكتاب"
-          name="book_id"
-          options={
-            books.map((book) => ({
-              value: book.book_id,
-              label: `${book.book_title} - ${book.book_id}`,
-            })) || []
-          }
+          label="العقوبة"
+          name="punishment_id"
+          options={punishments.map((punishment) => ({
+            value: punishment.punishment_id,
+            label: punishment.cause + " - " + punishment.duration + " يوم",
+          }))}
           register={register}
           rules={{ required: true }}
         />
@@ -132,4 +113,4 @@ function AddBookCopy() {
   );
 }
 
-export default AddBookCopy;
+export default AddPenaltys;

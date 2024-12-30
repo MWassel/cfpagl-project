@@ -7,11 +7,12 @@ import baseUrl from "../../utils/baseUrl";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState({});
   const [totalBooks, setTotalBooks] = useState(0);
   const [totalBookCopies, setTotalBookCopies] = useState(0);
   const [totalStudents, setTotalStudents] = useState(0);
   const [totalLoans, setTotalLoans] = useState(0);
+  const [totalUnreturnedLoans, setTotalUnreturnedLoans] = useState(0);
+  const [totalPenalties, setTotalPenalties] = useState(0);
   const navigate = useNavigate();
 
   const fetchTotalBooks = async () => {
@@ -78,12 +79,52 @@ const Dashboard = () => {
       });
   };
 
+  const fetchTotalUnreturnedLoans = async () => {
+    setLoading(true);
+    axios
+      .get(`${baseUrl()}/api/stats/total-unreturned-loans`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setTotalUnreturnedLoans(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  const fetchTotalPenalties = async () => {
+    setLoading(true);
+    axios
+      .get(`${baseUrl()}/api/stats/total-penalties-applied`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setTotalPenalties(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     fetchTotalBooks();
     fetchTotalBookCopies();
     fetchTotalStudents();
     fetchTotalLoans();
-  }, [totalBooks, totalBookCopies, totalStudents, totalLoans]);
+    fetchTotalUnreturnedLoans();
+    fetchTotalPenalties();
+  }, [
+    totalBooks,
+    totalBookCopies,
+    totalStudents,
+    totalLoans,
+    totalUnreturnedLoans,
+  ]);
 
   if (loading) {
     return <Loading />;
@@ -219,7 +260,7 @@ const Dashboard = () => {
             </svg>
           </div>
           <div>
-            <span className="block text-2xl font-bold">--</span>
+            <span className="block text-2xl font-bold">{totalPenalties}</span>
             <span className="block text-gray-500">العقوبات الملقات</span>
           </div>
         </div>
@@ -241,7 +282,9 @@ const Dashboard = () => {
             </svg>
           </div>
           <div>
-            <span className="block text-2xl font-bold">--</span>
+            <span className="block text-2xl font-bold">
+              {totalUnreturnedLoans}
+            </span>
             <span className="block text-gray-500">الإعارات الغير مستردة</span>
           </div>
         </div>

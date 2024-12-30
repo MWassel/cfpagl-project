@@ -2,6 +2,20 @@ import prismaClient from "../lib/prismaClient.js";
 
 const getLoans = async (req, res) => {
   try {
+    const loansGET = await prismaClient.loans.findMany({
+      where: {
+        loan_end_date: null,
+      },
+    });
+    res.status(200).json(loansGET);
+  } catch (error) {
+    console.error("Error getting loans:", error);
+    res.status(500).json({ error: "Internal Server Error." });
+  }
+};
+
+const getAllLoans = async (req, res) => {
+  try {
     const loansGET = await prismaClient.loans.findMany();
     res.status(200).json(loansGET);
   } catch (error) {
@@ -30,17 +44,13 @@ const postLoan = async (req, res) => {
 
 const patchLoan = async (req, res) => {
   try {
-    const { note, student_id, manager_id, copy_id } = req.body;
     const { loan_id } = req.params;
     const loanPATCH = await prismaClient.loans.update({
       where: {
         loan_id: parseInt(loan_id),
       },
       data: {
-        note,
-        student_id: parseInt(student_id),
-        manager_id: parseInt(manager_id),
-        copy_id,
+        loan_end_date: new Date(),
       },
     });
     res.status(200).json(loanPATCH);
@@ -50,4 +60,4 @@ const patchLoan = async (req, res) => {
   }
 };
 
-export { getLoans, postLoan, patchLoan };
+export { getLoans, postLoan, patchLoan, getAllLoans };

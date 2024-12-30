@@ -51,4 +51,30 @@ router.get("/total-students", (req, res) => {
     });
 });
 
+router.get("/total-unreturned-loans", (req, res) => {
+  prismaClient.loans
+    .count({
+      where: {
+        loan_end_date: null,
+      },
+    })
+    .then((count) => {
+      res.status(200).json(count);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+router.get("/total-penalties-applied", (req, res) => {
+  prismaClient.penalty_record
+    .count()
+    .then((count) => {
+      res.status(200).json(count);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 export default router;

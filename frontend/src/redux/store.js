@@ -11,6 +11,8 @@ import punishmentApi from "./features/punishment/punishmentApi";
 import bookCopyApi from "./features/bookCopy/bookCopyApi";
 import bookAuthorApi from "./features/bookAuthors/bookAuthorApi";
 import indexApi from "./features/index/indexApi";
+import loanApi from "./features/loan/loanApi";
+import penaltysApi from "./features/penaltys/penaltys";
 
 export const store = configureStore({
   reducer: {
@@ -26,6 +28,8 @@ export const store = configureStore({
     [bookCopyApi.reducerPath]: bookCopyApi.reducer,
     [bookAuthorApi.reducerPath]: bookAuthorApi.reducer,
     [indexApi.reducerPath]: indexApi.reducer,
+    [loanApi.reducerPath]: loanApi.reducer,
+    [penaltysApi.reducerPath]: penaltysApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -40,5 +44,7 @@ export const store = configureStore({
       .concat(punishmentApi.middleware)
       .concat(bookCopyApi.middleware)
       .concat(bookAuthorApi.middleware)
-      .concat(indexApi.middleware),
+      .concat(indexApi.middleware)
+      .concat(loanApi.middleware)
+      .concat(penaltysApi.middleware),
 });

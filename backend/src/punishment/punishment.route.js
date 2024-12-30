@@ -12,7 +12,7 @@ router.post("/create-punishment", postPunishment);
 // patch a punishment
 router.patch("/patch-punishment", patchPunishment);
 // get punishments
-router.get("/get-punishment", getPunishment);
+router.get("/", getPunishment);
 // delete a punishment
 router.delete("/delete-punishment", deletePunishment);
 
