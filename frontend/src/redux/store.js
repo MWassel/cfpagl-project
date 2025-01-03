@@ -13,6 +13,7 @@ import bookAuthorApi from "./features/bookAuthors/bookAuthorApi";
 import indexApi from "./features/index/indexApi";
 import loanApi from "./features/loan/loanApi";
 import penaltysApi from "./features/penaltys/penaltys";
+import readingSessionApi from "./features/readingSession/readingSessionApi";
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ export const store = configureStore({
     [indexApi.reducerPath]: indexApi.reducer,
     [loanApi.reducerPath]: loanApi.reducer,
     [penaltysApi.reducerPath]: penaltysApi.reducer,
+    [readingSessionApi.reducerPath]: readingSessionApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -46,5 +48,6 @@ export const store = configureStore({
       .concat(bookAuthorApi.middleware)
       .concat(indexApi.middleware)
       .concat(loanApi.middleware)
-      .concat(penaltysApi.middleware),
+      .concat(penaltysApi.middleware)
+      .concat(readingSessionApi.middleware),
 });

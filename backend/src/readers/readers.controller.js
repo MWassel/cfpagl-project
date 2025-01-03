@@ -2,7 +2,11 @@ import prismaClient from "../lib/prismaClient.js";
 
 const getReader = async (req, res) => {
   try {
-    const readerGET = await prismaClient.readers.findMany();
+    const readerGET = await prismaClient.readers.findMany({
+      where: {
+        exit_time: null,
+      },
+    });
     res.status(200).json(readerGET);
   } catch (error) {
     console.error("Error getting readers:", error);
@@ -15,8 +19,8 @@ const postReader = async (req, res) => {
     const { student_id, manager_id, copy_id, note } = req.body;
     const readerPOST = await prismaClient.readers.create({
       data: {
-        student_id,
-        manager_id,
+        student_id: parseInt(student_id),
+        manager_id: parseInt(manager_id),
         copy_id,
         note,
       },
@@ -30,17 +34,13 @@ const postReader = async (req, res) => {
 
 const patchReader = async (req, res) => {
   try {
-    const { student_id, mangager_id, copy_id, note } = req.body;
     const { read_session } = req.params;
     const readerPATCH = await prismaClient.readers.update({
       where: {
         read_session: parseInt(read_session),
       },
       data: {
-        student_id,
-        mangager_id,
-        copy_id,
-        note,
+        exit_time: new Date(),
       },
     });
     res.status(200).json(readerPATCH);

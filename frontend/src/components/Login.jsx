@@ -44,7 +44,7 @@ export const Login = () => {
   };
 
   return (
-    <div className="h-[calc(100vh - 120px)] flex justify-center items-center">
+    <div className="h-[calc(100vh - 120px)] flex justify-center items-center  mt-24 ">
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pb-6 mb-4">
         <h2 className="text-xl font-semibold mb-4 text-center">
           الرجاء تسجيل الدخول

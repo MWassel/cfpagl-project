@@ -7,6 +7,6 @@ router.post("/create-reader", postReader);
 // patch a reader
 router.patch("/patch-reader/:read_session", patchReader);
 // get readers
-router.get("/get-reader", getReader);
+router.get("/", getReader);
 
 export default router;

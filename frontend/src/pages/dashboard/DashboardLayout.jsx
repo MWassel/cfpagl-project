@@ -126,34 +126,7 @@ function DashboardLayout() {
               <span className="sr-only">BookAuthors</span>
               <FaBookReader className="h-6 w-6" />
             </Link>
-            <Link
-              to="/dashboard/messages"
-              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
-            >
-              <span className="sr-only">Messages</span>
-              <HiOutlineMailOpen className="h-6 w-6" />
-            </Link>
-            <Link
-              to="/dashboard/calendar"
-              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
-            >
-              <span className="sr-only">Calendar</span>
-              <HiOutlineCalendar className="h-6 w-6" />
-            </Link>
-            <Link
-              to="/dashboard/billing"
-              className="inline-flex items-center justify-center py-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg"
-            >
-              <span className="sr-only">Billing</span>
-              <HiOutlineCreditCard className="h-6 w-6" />
-            </Link>
           </nav>
-          <div className="inline-flex items-center justify-center h-20 w-20 border-t border-gray-700">
-            <button className="p-3 hover:text-gray-400 hover:bg-gray-700 focus:text-gray-400 focus:bg-gray-700 rounded-lg">
-              <span className="sr-only">Settings</span>
-              <HiOutlineCog className="h-6 w-6" />
-            </button>
-          </div>
         </div>
       </aside>
       <div className="flex-grow text-gray-800">
@@ -345,6 +318,26 @@ function DashboardLayout() {
                   />
                 </svg>
                 إستعادة كتاب
+              </Link>
+              <Link
+                to="/dashboard/Reading-session"
+                className="inline-flex px-5 py-3 text-white bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-md ml-6 mb-3"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  className="flex-shrink-0 h-6 w-6 text-white -ml-1 mr-2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                جلسة قراءة
               </Link>
             </div>
           </div>
