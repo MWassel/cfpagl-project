@@ -7,7 +7,7 @@ export const Home = () => {
     <>
       <Banner />
       <TrendingBooks />
-      <RecommendedBooks />
+      {/* <RecommendedBooks /> */}
     </>
   );
 };

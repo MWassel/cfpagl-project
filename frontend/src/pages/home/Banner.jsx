@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import bannerImg from "../../assets/banner.png";
 export const Banner = () => {
   return (
@@ -15,7 +16,9 @@ export const Banner = () => {
           عالم الأدب. من الروايات المثيرة إلى المذكرات الملهمة، تقدم الإصدارات
           الجديدة هذا الأسبوع شيئًا يناسب الجميع
         </p>
-        <button className="btn-primary">تعرف على المزيد</button>
+        <Link to="/books">
+          <button className="btn-primary">تعرف على المزيد</button>
+        </Link>
       </div>
     </div>
   );

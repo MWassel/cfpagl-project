@@ -48,7 +48,12 @@ const booksApi = createApi({
       invalidatesTags: ["Books"],
     }),
     fetchSingleBook: builder.query({
-      query: (id) => `/get-book/${id}`,
+      query: (id) => ({
+        url: `/get-book/${id}`,
+        method: "GET",
+        validateStatus: (response, result) =>
+          response.status === 200 && !result.error,
+      }),
     }),
   }),
 });

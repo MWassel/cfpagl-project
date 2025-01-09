@@ -9,6 +9,7 @@ import {
   deleteBook,
   getBook,
   getBookByID,
+  searchBooks,
 } from "./book.controller.js";
 
 const router = express.Router();
@@ -45,5 +46,7 @@ router.get("/", getBook);
 
 // get single book
 router.get("/get-book/:book_id", getBookByID);
+
+router.get("/search", searchBooks);
 
 export default router;

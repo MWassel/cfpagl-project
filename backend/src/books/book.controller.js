@@ -3,50 +3,78 @@ import prismaClient from "../lib/prismaClient.js";
 const getBook = async (req, res) => {
   try {
     const bookGET = await prismaClient.books.findMany({
-      where: { deleted: false },
+      where: {
+        deleted: false,
+      },
+      include: {
+        Categories: {
+          select: {
+            categorie_name: true,
+          },
+        },
+        publishing_house: {
+          select: {
+            publishing_house_name: true,
+          },
+        },
+      },
     });
-    res.status(200).json(bookGET);
+
+    // Fix: Spread 'book' instead of 'bookGET'
+    const booksWithRelativePaths = bookGET.map((book) => ({
+      ...book,
+      cover: `/assets/book-covers/${book.cover.split("book-covers/")[1]}`,
+    }));
+
+    res.status(200).json(booksWithRelativePaths);
   } catch (error) {
     console.error("Error getting books:", error);
     res.status(500).json({ error: "Internal Server Error." });
   }
 };
-
 const getBookByID = async (req, res) => {
   try {
-    const { book_id } = req.params;
+    const book_id = req.params.book_id; // Make sure this matches your route parameter
 
-    // Fetch book data from the database
     const bookGET = await prismaClient.books.findUnique({
-      where: { book_id: book_id },
+      where: {
+        book_id: book_id,
+        deleted: false,
+      },
+      include: {
+        Categories: {
+          select: {
+            categorie_name: true,
+          },
+        },
+        publishing_house: {
+          select: {
+            publishing_house_name: true,
+          },
+        },
+      },
     });
 
     if (!bookGET) {
       return res.status(404).json({ error: "Book not found." });
     }
 
-    const imageUrl = bookGET.cover
-      ? `${req.protocol}://${req.get("host")}/assets/book-covers/${
-          bookGET.cover
-        }`
+    const cover = bookGET.cover
+      ? `/assets/book-covers/${bookGET.cover.split("book-covers/")[1]}`
       : null;
 
-    return res.status(200).json({
-      book_id: bookGET.book_id,
-      title: bookGET.book_title,
-      summary: bookGET.summary,
-      total_pages: bookGET.total_pages,
-      publishing_year: bookGET.publishing_year,
-      pubHouseId: bookGET.publishing_house_id,
-      category: bookGET.categorie_id,
-      imageUrl: imageUrl,
-    });
+    const response = {
+      ...bookGET,
+      cover: cover,
+    };
+
+    console.log("Sending response:", response); // Add debug log
+    return res.status(200).json(response);
   } catch (error) {
     console.error("Error finding a book:", error);
     return res.status(500).json({ error: "Internal Server Error." });
   }
 };
-
 const postBook = async (req, res) => {
   try {
     const {
@@ -138,5 +166,42 @@ const deleteBook = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error." });
   }
 };
+const searchBooks = async (req, res) => {
+  try {
+    const { query } = req.query;
 
-export { getBook, getBookByID, postBook, patchBook, deleteBook };
+    if (!query) {
+      return res.status(200).json([]);
+    }
+
+    const books = await prismaClient.books.findMany({
+      where: {
+        book_title: {
+          contains: query,
+        },
+        deleted: false,
+      },
+      select: {
+        book_id: true,
+        book_title: true,
+        cover: true,
+      },
+      take: 5, // Limit results to 5 books
+    });
+
+    // Process cover paths
+    const booksWithProcessedCovers = books.map((book) => ({
+      ...book,
+      cover: book.cover
+        ? `/assets/book-covers/${book.cover.split("book-covers/")[1]}`
+        : null,
+    }));
+
+    res.status(200).json(booksWithProcessedCovers);
+  } catch (error) {
+    console.error("Error searching books:", error);
+    res.status(500).json({ error: "Internal Server Error." });
+  }
+};
+
+export { getBook, getBookByID, postBook, patchBook, deleteBook, searchBooks };

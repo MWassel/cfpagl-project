@@ -2,13 +2,31 @@ import prismaClient from "../lib/prismaClient.js";
 
 const getIndexById = async (req, res) => {
   try {
-    const indexGET = await prismaClient.indexs.findUnique({
-      where: { index_id_book_id: req.params },
+    const book_id = req.params.book_id;
+
+    const indexGET = await prismaClient.indexs.findFirst({
+      where: {
+        book_id: book_id,
+      },
     });
-    res.status(200).json(indexGET);
+
+    if (!indexGET) {
+      return res.status(404).json({ error: "Index not found" });
+    }
+
+    const index_picture = indexGET.index_picture
+      ? `/assets/book-indexs/${indexGET.index_picture.split("book-indexs/")[1]}`
+      : null;
+
+    const response = {
+      ...indexGET,
+      index_picture: index_picture,
+    };
+
+    return res.status(200).json(response);
   } catch (error) {
-    console.error("Error getting indexes:", error);
-    res.status(500).json({ error: "Internal Server Error." });
+    console.error("Error getting index:", error);
+    return res.status(500).json({ error: "Internal Server Error." });
   }
 };
 

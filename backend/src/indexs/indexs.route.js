@@ -29,6 +29,6 @@ router.patch(
   patchIndex
 );
 // get single indexs
-router.get("/get-index/:index_id/:book_id", getIndexById);
+router.get("/get-index/:book_id", getIndexById);
 
 export default router;

@@ -22,6 +22,7 @@ import AddLoan from "../pages/dashboard/addLoan/AddLoan.jsx";
 import ReturnBook from "../pages/dashboard/returnBooks/ReturnBook.jsx";
 import AddPenaltys from "../pages/dashboard/addPenaltys/AddPenaltys.jsx";
 import AddReadingSession from "../pages/dashboard/addReadingSession/AddReadingSession.jsx";
+import BooksGrid from "../pages/books/BooksGrid.jsx";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "/books/:book_id",
         element: <SingleBook />,
+      },
+      {
+        path: "/books",
+        element: <BooksGrid />,
       },
     ],
   },

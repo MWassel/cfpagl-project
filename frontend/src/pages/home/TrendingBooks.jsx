@@ -5,43 +5,62 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Navigation, Pagination } from "swiper/modules";
-import { useFetchSpecialitiesQuery } from "../../redux/features/specialities/specialitiesApi";
+import axios from "axios";
+import baseUrl from "../../utils/baseUrl";
 
 export const TrendingBooks = () => {
-  const categories = ["all", "business", "adventure", "fiction", "horror"];
+  const [categories, setCategories] = useState([]);
   const [books, setBooks] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  // const { data: specialities } = useFetchSpecialitiesQuery();
-  // console.log(specialities);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${baseUrl()}/api/categories`);
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get(`${baseUrl()}/api/books`);
+      setBooks(response.data);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
+
   useEffect(() => {
-    fetch("books.json")
-      .then((res) => res.json())
-      .then((data) => setBooks(data));
+    fetchCategories();
+    fetchBooks();
   }, []);
 
   const filteredBooks =
     selectedCategory === "all"
       ? books
       : books.filter(
-          (book) => book.category === selectedCategory.toLowerCase()
+          (book) => book.categorie_id === parseInt(selectedCategory)
         );
 
   return (
-    <div className=" py-10">
-      <h2 className=" text-2xl font-semibold mb-6 ">الأكثر شهرة</h2>
-      {/* Catagory filter */}
-      <div className=" mb-8 flex items-center">
+    <div className="py-10">
+      <h2 className="text-2xl font-semibold mb-6">الأكثر شهرة</h2>
+      <div className="mb-8 flex items-center">
         <select
           onChange={(e) => setSelectedCategory(e.target.value)}
+          value={selectedCategory}
           name="category"
           id="category"
-          className=" border bg-[#EAEAEA] border-gray-300 rounded-md px-4 py-2 focus:outline-none"
+          className="border bg-[#EAEAEA] border-gray-300 rounded-md px-4 py-2 focus:outline-none"
         >
-          {categories.map((category, index) => (
-            <option key={index} value={category}>
-              {category}
-            </option>
-          ))}
+          <option value="all">All Categories</option>
+          {Array.isArray(categories) &&
+            categories.map((category) => (
+              <option key={category.categorie_id} value={category.categorie_id}>
+                {category.categorie_name}
+              </option>
+            ))}
         </select>
       </div>
 
@@ -50,29 +69,17 @@ export const TrendingBooks = () => {
         spaceBetween={30}
         navigation={true}
         breakpoints={{
-          640: {
-            slidesPerView: 1,
-            spaceBetween: 20,
-          },
-          768: {
-            slidesPerView: 2,
-            spaceBetween: 40,
-          },
-          1024: {
-            slidesPerView: 2,
-            spaceBetween: 50,
-          },
-          1180: {
-            slidesPerView: 3,
-            spaceBetween: 50,
-          },
+          640: { slidesPerView: 1, spaceBetween: 20 },
+          768: { slidesPerView: 2, spaceBetween: 40 },
+          1024: { slidesPerView: 2, spaceBetween: 50 },
+          1180: { slidesPerView: 3, spaceBetween: 50 },
         }}
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {filteredBooks.length > 0 &&
-          filteredBooks.map((book, index) => (
-            <SwiperSlide key={index}>
+        {filteredBooks?.length > 0 &&
+          filteredBooks.map((book) => (
+            <SwiperSlide key={book.book_id}>
               <BookCard book={book} />
             </SwiperSlide>
           ))}
@@ -80,3 +87,5 @@ export const TrendingBooks = () => {
     </div>
   );
 };
+
+export default TrendingBooks;
