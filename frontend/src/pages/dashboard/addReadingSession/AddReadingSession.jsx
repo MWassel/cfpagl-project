@@ -120,13 +120,11 @@ function AddReadingSession() {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <InputField
-              label="ملاحظة"
-              name="note"
-              placeholder="ادخل ملاحظة"
-              type="text"
+              label="رمز نسخة الكتاب"
+              name="copy_id"
+              placeholder="أدخل رمز نسخة الكتاب"
               register={register}
             />
-
             <SelectField
               label="رمز المتربص"
               name="student_id"
@@ -152,9 +150,10 @@ function AddReadingSession() {
             />
 
             <InputField
-              label="رمز نسخة الكتاب"
-              name="copy_id"
-              placeholder="أدخل رمز نسخة الكتاب"
+              label="ملاحظة"
+              name="note"
+              placeholder="ادخل ملاحظة"
+              type="text"
               register={register}
             />
 

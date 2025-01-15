@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Outlet, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import baseUrl from "../../utils/baseUrl";
@@ -10,6 +10,7 @@ import {
   HiOutlineCalendar,
   HiOutlineCreditCard,
 } from "react-icons/hi";
+import { IoSearchOutline } from "react-icons/io5";
 import { SiGoogleclassroom } from "react-icons/si";
 import { PiStudent } from "react-icons/pi";
 import { FaPencilAlt } from "react-icons/fa";
@@ -31,6 +32,67 @@ function DashboardLayout() {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
+
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const dropdownRef = useRef(null);
+  const searchTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    // Handle clicks outside of dropdown
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    // Debounce search
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    if (searchQuery.trim()) {
+      setIsLoading(true);
+      searchTimeoutRef.current = setTimeout(async () => {
+        try {
+          const response = await axios.get(
+            `${baseUrl()}/api/books/search?query=${encodeURIComponent(
+              searchQuery.trim()
+            )}`
+          );
+          setSearchResults(response.data);
+          setShowDropdown(true);
+        } catch (error) {
+          console.error("Search error:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }, 300); // 300ms delay
+    } else {
+      setSearchResults([]);
+      setShowDropdown(false);
+    }
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current);
+      }
+    };
+  }, [searchQuery]);
+
+  const handleBookClick = (bookId) => {
+    setShowDropdown(false);
+    setSearchQuery("");
+    navigate(`/books/${bookId}`);
+  };
 
   const handleLogout = () => {
     axios
@@ -161,12 +223,50 @@ function DashboardLayout() {
                 clipRule="evenodd"
               />
             </svg>
-            <input
-              type="text"
-              role="search"
-              placeholder="Search..."
-              className="py-2 pl-10 pr-4 w-full border-4 border-transparent placeholder-gray-400 focus:bg-gray-50 rounded-lg"
-            />
+            <div
+              className="relative flex-1 flex justify-center"
+              ref={dropdownRef}
+            >
+              <IoSearchOutline className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+              <input
+                type="text"
+                role="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="بحث..."
+                className="py-2 pl-10 pr-4 w-full border-4 border-transparent placeholder-gray-400 focus:bg-gray-50 rounded-lg"
+              />
+              {showDropdown && (
+                <div className="absolute mt-2 w-full bg-white rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
+                  {isLoading ? (
+                    <div className="p-4 text-center text-gray-500">
+                      Loading...
+                    </div>
+                  ) : searchResults.length > 0 ? (
+                    <div className="py-2">
+                      {searchResults.map((book) => (
+                        <div
+                          key={book.book_id}
+                          onClick={() => handleBookClick(book.book_id)}
+                          className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          <img
+                            src={`${baseUrl()}${book.cover}`}
+                            alt={book.book_title}
+                            className="w-12 h-16 object-cover rounded mr-4"
+                          />
+                          <span className="text-sm">{book.book_title}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="p-4 text-center text-gray-500">
+                      No books found
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex flex-shrink-0 items-center ml-auto">
             <div className="inline-flex items-center p-2rounded-lg">

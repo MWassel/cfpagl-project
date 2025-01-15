@@ -160,3 +160,4 @@ foreign key (loan_id) references loans
 foreign key (punishment_id) references punishment
 (punishment_id)
 );
+

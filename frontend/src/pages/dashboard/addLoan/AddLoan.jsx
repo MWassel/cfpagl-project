@@ -85,9 +85,9 @@ function AddLoan() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <InputField
-          label="ملاحظة"
-          name="note"
-          placeholder="أدخل ملاحظة (خياري)"
+          label="رمز نسخة الكتاب"
+          name="copy_id"
+          placeholder="أدخل رمز نسخة الكتاب "
           register={register}
         />
 
@@ -114,9 +114,9 @@ function AddLoan() {
         />
 
         <InputField
-          label="رمز نسخة الكتاب"
-          name="copy_id"
-          placeholder="أدخل رمز نسخة الكتاب "
+          label="ملاحظة"
+          name="note"
+          placeholder="أدخل ملاحظة (خياري)"
           register={register}
         />
 
