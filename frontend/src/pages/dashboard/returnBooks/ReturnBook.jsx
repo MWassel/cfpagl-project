@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   useGetLoansQuery,
@@ -6,6 +6,7 @@ import {
 } from "../../../redux/features/loan/loanApi";
 
 function ReturnBook() {
+  const [searchTerm, setSearchTerm] = useState("");
   const {
     data: loans,
     isLoading,
@@ -29,6 +30,11 @@ function ReturnBook() {
     }
   };
 
+  // Filter loans based on search term
+  const filteredLoans = loans?.filter((loan) =>
+    loan.student_id.toString().includes(searchTerm)
+  );
+
   return (
     <section className="py-1 bg-blueGray-50">
       <div className="w-full xl:w-8/12 mb-12 xl:mb-0 px-4 mx-auto mt-24">
@@ -41,6 +47,18 @@ function ReturnBook() {
                 </h3>
               </div>
             </div>
+          </div>
+
+          {/* Search Input */}
+          <div className="px-4 py-2">
+            <input
+              type="text"
+              placeholder="البحث برمز المتربص..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="px-4 py-2 border rounded-lg w-full text-right"
+              style={{ direction: "rtl" }}
+            />
           </div>
 
           <div className="block w-full overflow-x-auto">
@@ -66,7 +84,7 @@ function ReturnBook() {
               </thead>
 
               <tbody>
-                {loans?.map((loan, index) => (
+                {filteredLoans?.map((loan, index) => (
                   <tr key={loan.loan_id}>
                     <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-nowrap p-4 text-left text-blueGray-700">
                       {index + 1}

@@ -73,6 +73,12 @@ function AddReadingSession() {
 
   // Handle creating a new session
   const onSubmit = async (data) => {
+    // Add manager_id to the form data directly
+    const formDataWithManager = {
+      ...data,
+      manager_id: user.id,
+    };
+
     const result = await Swal.fire({
       title: "هل أنت متأكد؟",
       text: "يرجى التأكد من صحة البيانات المدخلة",
@@ -86,7 +92,7 @@ function AddReadingSession() {
 
     if (result.isConfirmed) {
       try {
-        await createReadingSession(data).unwrap();
+        await createReadingSession(formDataWithManager).unwrap();
         await Swal.fire({
           title: "نجاح",
           text: "تم اضافة جلسة قراءة بنجاح",
@@ -137,15 +143,6 @@ function AddReadingSession() {
                   " " +
                   student.last_name,
               }))}
-              register={register}
-            />
-
-            <SelectField
-              label="رمزك"
-              name="manager_id"
-              options={[
-                { value: user.id, label: `${user.username} (${user.id})` },
-              ]}
               register={register}
             />
 

@@ -8,6 +8,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../../context/authContext";
 import { useAddLoanMutation } from "../../../redux/features/loan/loanApi";
 import baseUrl from "../../../utils/baseUrl";
+
 function AddLoan() {
   const { user } = useAuth();
   const [students, setStudents] = useState([]);
@@ -26,6 +27,7 @@ function AddLoan() {
   useEffect(() => {
     fetchStudents();
   }, []);
+
   const {
     register,
     handleSubmit,
@@ -36,7 +38,13 @@ function AddLoan() {
   const [addLoan, { isLoading, isError }] = useAddLoanMutation();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    // Add manager_id to the form data directly
+    const formDataWithManager = {
+      ...data,
+      manager_id: user.id,
+    };
+
+    console.log(formDataWithManager);
     const result = await Swal.fire({
       title: "هل أنت متأكد؟",
       text: "يرجى التأكد من صحة البيانات المدخلة",
@@ -50,7 +58,7 @@ function AddLoan() {
 
     if (result.isConfirmed) {
       try {
-        await addLoan(data).unwrap();
+        await addLoan(formDataWithManager).unwrap();
         Swal.fire({
           title: "نجاح",
           text: "تم الإعارة بنجاح",
@@ -103,13 +111,6 @@ function AddLoan() {
               " " +
               student.last_name,
           }))}
-          register={register}
-        />
-
-        <SelectField
-          label="رمزك"
-          name="manager_id"
-          options={[{ value: user.id, label: `${user.username} (${user.id})` }]}
           register={register}
         />
 

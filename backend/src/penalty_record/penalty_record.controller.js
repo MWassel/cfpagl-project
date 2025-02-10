@@ -2,7 +2,11 @@ import prismaClient from "../lib/prismaClient.js";
 
 const getPenaltyRecord = async (req, res) => {
   try {
-    const penaltyRecordGET = await prismaClient.penalty_record.findMany();
+    const penaltyRecordGET = await prismaClient.penalty_record.findMany({
+      include: {
+        punishment: true, // Include the related punishment data
+      },
+    });
     res.status(200).json(penaltyRecordGET);
   } catch (error) {
     console.error("Error getting penalty records:", error);

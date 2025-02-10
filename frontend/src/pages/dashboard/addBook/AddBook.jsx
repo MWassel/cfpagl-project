@@ -3,7 +3,8 @@ import InputField from "./InputField";
 import SelectField from "./SelectField";
 import { useForm } from "react-hook-form";
 import { useAddBookMutation } from "../../../redux/features/books/booksApi";
-import { useAddIndexMutation } from "../../../redux/features/index/indexApi.js"; // Assuming this is your index API hook
+import { useAddIndexMutation } from "../../../redux/features/index/indexApi";
+import { useAddBookCopyMutation } from "../../../redux/features/bookCopy/bookCopyApi";
 import Swal from "sweetalert2";
 import axios from "axios";
 import baseUrl from "../../../utils/baseUrl";
@@ -23,16 +24,15 @@ const AddBook = () => {
     reset,
   } = useForm();
 
-  // Watch bookId field for live updates
   const watchedBookId = watch("bookId", "");
 
-  // Update bookId state when the watched value changes
   useEffect(() => {
     setBookId(watchedBookId);
   }, [watchedBookId]);
 
   const [addBook, { isLoading: isBookLoading }] = useAddBookMutation();
   const [addIndex, { isLoading: isIndexLoading }] = useAddIndexMutation();
+  const [addBookCopy, { isLoading: isCopyLoading }] = useAddBookCopyMutation();
 
   const fetchCategories = async () => {
     try {
@@ -84,6 +84,7 @@ const AddBook = () => {
 
   const onSubmit = async (data) => {
     try {
+      // First, add the book
       const bookFormData = new FormData();
       bookFormData.append("book_id", data.bookId);
       bookFormData.append("book_title", data.bookTitle);
@@ -99,6 +100,7 @@ const AddBook = () => {
 
       await addBook(bookFormData).unwrap();
 
+      // Then, add the index
       const indexFormData = new FormData();
       indexFormData.append("index_id", data.indexId);
       indexFormData.append("book_id", data.bookId);
@@ -109,9 +111,19 @@ const AddBook = () => {
 
       await addIndex(indexFormData).unwrap();
 
+      // Finally, add the book copy
+      const copyData = {
+        copy_id: `${data.bookId}-1`, // First copy of the book
+        inventory_number: data.inventoryNumber,
+        location: data.location,
+        book_id: data.bookId,
+      };
+
+      await addBookCopy(copyData).unwrap();
+
       Swal.fire({
         title: "نجاح",
-        text: "تم اضافة الكتاب والفهرس بنجاح",
+        text: "تم اضافة الكتاب والفهرس ونسخة الكتاب بنجاح",
         icon: "success",
         confirmButtonText: "تم",
       });
@@ -123,7 +135,7 @@ const AddBook = () => {
       console.error(error);
       Swal.fire({
         title: "خطأ",
-        text: "فشل في اضافة الكتاب او الفهرس",
+        text: "فشل في اضافة الكتاب او الفهرس او نسخة الكتاب",
         icon: "error",
       });
     }
@@ -202,6 +214,24 @@ const AddBook = () => {
           rules={{ required: true }}
         />
 
+        {/* New fields for book copy */}
+        <InputField
+          label="رقم الجرد"
+          name="inventoryNumber"
+          placeholder="ادخل رقم الجرد"
+          type="number"
+          register={register}
+          rules={{ required: true }}
+        />
+
+        <InputField
+          label="الموقع في المكتبة"
+          name="location"
+          placeholder="ادخل الموقع في المكتبة"
+          register={register}
+          rules={{ required: true }}
+        />
+
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
@@ -233,9 +263,11 @@ const AddBook = () => {
         <button
           type="submit"
           className="w-full py-2 bg-green-500 text-white font-bold rounded-md hover:bg-green-600 transition-colors"
-          disabled={isBookLoading || isIndexLoading}
+          disabled={isBookLoading || isIndexLoading || isCopyLoading}
         >
-          {isBookLoading || isIndexLoading ? "جاري الإضافة..." : "اضافة"}
+          {isBookLoading || isIndexLoading || isCopyLoading
+            ? "جاري الإضافة..."
+            : "اضافة"}
         </button>
       </form>
     </div>

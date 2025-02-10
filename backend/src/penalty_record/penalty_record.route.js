@@ -12,6 +12,6 @@ router.post("/create-pemalty_record", postPenaltyRecord);
 // patch a pemalty_record
 router.patch("/patch-pemalty_record/:penalty_id", patchPenaltyRecord);
 // get pemalty_records
-router.get("/get-pemalty_record", getPenaltyRecord);
+router.get("/", getPenaltyRecord);
 
 export default router;

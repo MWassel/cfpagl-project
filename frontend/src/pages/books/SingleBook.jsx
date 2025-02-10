@@ -56,7 +56,7 @@ const SingleBook = () => {
             <div className="grid grid-cols-1 gap-4">
               <div className="mb-4">
                 <h2 className="text-xl font-semibold mb-2 text-gray-700">
-                  Summary
+                  مقدمة
                 </h2>
                 <p className="text-gray-600">
                   {book.summary || "No summary available"}
@@ -65,40 +65,36 @@ const SingleBook = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <h3 className="font-semibold text-gray-700">Category</h3>
+                  <h3 className="font-semibold text-gray-700">الصنف</h3>
                   <p className="text-gray-600">
                     {book.Categories?.categorie_name}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-700">
-                    Publishing House
-                  </h3>
+                  <h3 className="font-semibold text-gray-700">دار النشر</h3>
                   <p className="text-gray-600">
                     {book.publishing_house?.publishing_house_name}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-700">
-                    Publishing Year
-                  </h3>
+                  <h3 className="font-semibold text-gray-700">سنة النشر</h3>
                   <p className="text-gray-600">{book.publishing_year}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-700">Total Pages</h3>
+                  <h3 className="font-semibold text-gray-700">عدد الصفحات</h3>
                   <p className="text-gray-600">{book.total_pages}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-700">Book ID</h3>
+                  <h3 className="font-semibold text-gray-700">رمز الكتاب</h3>
                   <p className="text-gray-600">{book.book_id}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-700">Added Date</h3>
+                  <h3 className="font-semibold text-gray-700">تاريخ الحجز</h3>
                   <p className="text-gray-600">
                     {new Date(book.stored_date).toLocaleDateString()}
                   </p>
@@ -113,7 +109,7 @@ const SingleBook = () => {
               {/* Book Cover */}
               <div>
                 <h3 className="text-lg font-semibold mb-3 text-gray-700">
-                  Book Cover
+                  غلاف الكتاب
                 </h3>
                 <img
                   src={`${baseUrl()}${book.cover}`}
@@ -125,7 +121,7 @@ const SingleBook = () => {
               {/* Book Index */}
               <div>
                 <h3 className="text-lg font-semibold mb-3 text-gray-700">
-                  Book Index
+                  الفهرس
                 </h3>
                 {indexLoading ? (
                   <div>Loading index...</div>
