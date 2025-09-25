@@ -42,10 +42,10 @@ const loginManager = async (req, res) => {
           id,
           username: managerGET.username,
         },
-        process.env.JWT_SECRET || "cfpagl secret",
+        process.env.JWT_SECRET,
         {
           expiresIn: "1d",
-          algorithm: "HS256", // Explicitly set algorithm
+          algorithm: "HS256", 
         }
       );
     };
@@ -55,10 +55,9 @@ const loginManager = async (req, res) => {
     // Cookie and response configuration
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // HTTPS only in production
-      sameSite: "strict", // Protect against CSRF
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: "strict", 
+      maxAge: 24 * 60 * 60 * 1000, 
 
     // Return user info without sensitive data
     res.status(200).json({
@@ -67,7 +66,7 @@ const loginManager = async (req, res) => {
         id: managerGET.manager_id,
         username: managerGET.username,
       },
-      token, // Optional: return token for client-side storage if needed
+      token, 
     });
   } catch (error) {
     console.error("Error logging in manager:", error);
@@ -124,7 +123,7 @@ const validateToken = async (req, res) => {
       select: {
         manager_id: true,
         username: true,
-        // Add other non-sensitive fields
+        
       },
     });
 
